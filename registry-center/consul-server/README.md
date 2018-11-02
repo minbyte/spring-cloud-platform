@@ -54,7 +54,7 @@ C:\Users\Klyg028>consul agent -dev
 # 启动参数说明
 
 启动参数	|	说明
-:-----------: |  :-----------:
+----------- |  -----------
 -advertise	|	通知展现地址用来改变我们给集群中的其他节点展现的地址，一般情况下-bind地址就是展现地址
 -bootstrap	|	用来控制一个server是否在bootstrap模式，在一个datacenter中只能有一个server处于bootstrap模式，当一个server处于bootstrap模式时，可以自己选举为raft leader
 -bootstrap-expect	|	在一个datacenter中期望提供的server节点数目，当该值提供的时候，consul一直等到达到指定sever数目的时候才会引导整个集群，该标记不能和bootstrap公用
