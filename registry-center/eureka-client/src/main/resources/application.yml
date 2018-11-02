@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: eureka-server
+    name: eureka-client
   profiles:
     active: dev  # 环境 dev|test|prod
 
