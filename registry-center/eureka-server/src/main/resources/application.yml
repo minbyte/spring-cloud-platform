@@ -1,0 +1,25 @@
+server:
+  port: 7100
+
+spring:
+  application:
+    name: eureka-server
+  profiles:
+    active: dev  # 环境 dev|test|prod
+
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${spring.application.instance_id:${server.port}}
+  server:  #配置属性，但由于 Eureka 自我保护模式以及心跳周期长的原因，经常会遇到 Eureka Server 不剔除已关停的节点的问题
+    enable-self-preservation: false    #关闭注册中心的保护机制，Eureka 会统计15分钟之内心跳失败的比例低于85%将会触发保护机制，不剔除服务提供者，如果关闭，服务注册中心将不可用的实例正确剔除
+    eviction-interval-timer-in-ms: 5000 #清理间隔（单位毫秒，默认是60*1000）5秒将客户端剔除的服务在服务注册列表中剔除#
+    use-read-only-response-cache: false # 禁用readOnlyCacheMap（中小集群可以直接关闭，但在大集群中建议还是开启，使用response-cache-update-interval-ms=3000进行配置）
+    response-cache-update-interval-ms: 3000  #eureka server刷新readCacheMap的时间，注意，client读取的是readCacheMap，这个时间决定了多久会把readWriteCacheMap的缓存更新到readCacheMap上  默认30s
+    response-cache-auto-expiration-in-seconds: 180   #eureka server缓存readWriteCacheMap失效时间，这个只有在这个时间过去后缓存才会失效，失效前不会更新，过期后从registry重新读取注册服务信息，registry是一个ConcurrentHashMap。
+  client:
+    register-with-eureka: false #false: 不作为一个客户端注册到注册中心
+    fetch-registry: false  # 因为服务注册中心的职责就是维护服务服务实例，它并不需要去检索服务，所以设置为false。
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka  #指定服务注册中心的地址
