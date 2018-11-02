@@ -24,6 +24,7 @@
 
         <spring-boot.version>2.0.4.RELEASE</spring-boot.version>
         <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
+        <zipkin.version>2.9.4</zipkin.version>
         <apollo.version>1.1.1</apollo.version>
 
         <jedis.version>2.9.0</jedis.version>
@@ -50,7 +51,6 @@
         <shiro.version>1.4.0</shiro.version>
         <lombok.verson>1.16.20</lombok.verson>
         <swagger.version>2.7.0</swagger.version>
-        <zipkin.version>2.9.4</zipkin.version>
 
         <qiniu.version>[7.2.0, 7.2.99]</qiniu.version>
         <aliyun.oss.version>2.8.3</aliyun.oss.version>
@@ -270,28 +270,6 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        <!-- 公司仓库-->
-        <repository>
-            <id>mangguo-releases</id>
-            <name>mangguo Private Artifactory Releases Repository</name>
-            <url>http://10.200.12.50:9092/repository/common-Release/</url>
-            <releases>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>mangguo-snapshots</id>
-            <name>mangguo Private Artifactory Snapshots Repository</name>
-            <url>http://10.200.12.50:9092/repository/common-Snapshot/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
     </repositories>
 
     <pluginRepositories>
@@ -308,18 +286,5 @@
         </pluginRepository>
     </pluginRepositories>
 
-    <!-- 发布到公司仓库-->
-    <distributionManagement>
-        <repository>
-            <id>common-releases</id>
-            <name>mangguo Private Artifactory Releases Repository</name>
-            <url>http://10.200.12.50:9092/repository/common-Release/</url>
-        </repository>
-        <snapshotRepository>
-            <id>common-snapshots</id>
-            <name>mangguo Private Artifactory Snapshots Repository</name>
-            <url>http://10.200.12.50:9092/repository/common-Snapshot/</url>
-        </snapshotRepository>
-    </distributionManagement>
-    
+
 </project>
