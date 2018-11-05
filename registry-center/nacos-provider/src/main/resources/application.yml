@@ -1,0 +1,32 @@
+#server:
+#  port: 7104
+#
+#spring:
+#  application:
+#    name: nacos-provider
+#  profiles:
+#    active: dev  # 环境 dev|test|prod
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: 127.0.0.1:8848
+#
+##springboot2.0 的actuator配置项为：
+#management:
+#  endpoint:
+#    shutdown:
+#          enabled: true # 开始POST shutdown
+#  endpoints:
+#    web:
+##      base-path: "/" #修改访问路径  2.0之前默认是/   2.0默认是 /actuator  可以通过这个属性值修改
+#      exposure:
+#        include: '*'  #开放所有页面节点  默认只开启了health、info两个节点
+#
+#info: # 应用信息 /actuator/info 显示信息
+#  app:
+#    name: "@project.artifactId@"
+#    encoding: '@project.build.sourceEncoding@'
+#    profiles: ${spring.profiles.active}
+#    java:
+#      source: '@java.version@'
+#      target: '@java.version@'
