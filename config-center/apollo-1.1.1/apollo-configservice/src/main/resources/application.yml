@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: apollo-configservice
+  profiles:
+#    active: dev
+    active: ${apollo_profile}
+
+ctrip:
+  appid: 100003171
+  
+server:
+  port: 9000
+
+logging:
+  file: /home/boot/logs/apollo/100003171/configservice.log

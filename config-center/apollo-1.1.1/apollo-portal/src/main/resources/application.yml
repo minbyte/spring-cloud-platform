@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: apollo-portal
+  profiles:
+#    active: dev,auth
+    active: ${apollo_profile}
+
+server:
+  port: 9002
+  compression:
+    enabled: true
+  
+logging:
+  file: /opt/logs/100003173/apollo-portal.log
+
+management:
+  health:
+    status:
+      order: DOWN, OUT_OF_SERVICE, UNKNOWN, UP 
+
+
