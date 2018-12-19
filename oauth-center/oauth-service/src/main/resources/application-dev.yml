@@ -1,0 +1,15 @@
+logging:
+  level.root: info
+
+#eureka
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 20
+  client:
+    serviceUrl:
+      # 服务注册中心地址
+      defaultZone: http://localhost:7000/eureka
+      # 表示eureka client间隔多久去拉取服务注册信息，默认为30秒
+    registry-fetch-interval-seconds: 10

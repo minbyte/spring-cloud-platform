@@ -1,0 +1,22 @@
+# tomcat
+server:
+  port: 7020
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: oauth-service
+  profiles:
+    active: dev
+  # jackson时间格式化
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+
+logging:
+  config: classpath:logback-spring.xml
+  level:
+    dao: debug
+    org:
+      mybatis: debug
