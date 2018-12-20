@@ -9,12 +9,10 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.client.InMemoryClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-
 
 /**
  * @author: min
@@ -25,6 +23,10 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
+    /**
+     * ClientDetails加载数据源
+     * @see ClientDetailsServiceConfig
+     */
     @Autowired(required = false)
     private InMemoryClientDetailsService inMemoryClientDetailsService;
     @Autowired(required = false)
@@ -32,14 +34,22 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired(required = false)
     private RedisClientDetailsService redisClientDetailsService;
 
+    /**
+     * token存储配置
+     * @see TokenStoreConfig
+     */
     @Autowired
     private TokenStore tokenStore;
 
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    /**
+     * @see SecurityHandlerConfig
+     */
     @Autowired
     private WebResponseExceptionTranslator webResponseExceptionTranslator;
+
     /**
      * client客户端的信息配置，配置客户端详情信息(内存或JDBC来实现)
      * @param clients
