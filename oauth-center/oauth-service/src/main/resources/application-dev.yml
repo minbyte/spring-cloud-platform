@@ -49,4 +49,7 @@ security:
   oauth2:
     token:
       store:
-        type: jdbc  # inMemory，jdbc，redis，clusterRedis，jwt。
+        type: jdbc  # token存储配置：inMemory，jdbc，redis，clusterRedis，jwt
+    clientDetails:
+      load:
+        type: jdbc  # clientDetails加载配置：inMemory，jdbc，redis

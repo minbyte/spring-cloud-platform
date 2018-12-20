@@ -32,7 +32,7 @@ public class ClientDetailsServiceConfig {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Bean
-    @ConditionalOnProperty(prefix="security.oauth2.clientDetails.store",name="type" ,havingValue="inMemory" ,matchIfMissing=true)
+    @ConditionalOnProperty(prefix="security.oauth2.clientDetails.load",name="type" ,havingValue="inMemory" ,matchIfMissing=true)
     public InMemoryClientDetailsService inMemoryClientDetailsService(){
         InMemoryClientDetailsService clientDetailsService = new InMemoryClientDetailsService();
 
@@ -50,14 +50,14 @@ public class ClientDetailsServiceConfig {
     }
 
     @Bean
-    @ConditionalOnProperty(prefix="security.oauth2.clientDetails.store",name="type" ,havingValue="jdbc" ,matchIfMissing=false)
+    @ConditionalOnProperty(prefix="security.oauth2.clientDetails.load",name="type" ,havingValue="jdbc" ,matchIfMissing=false)
     public JdbcClientDetailsService jdbcClientDetailsService() {
         JdbcClientDetailsService clientDetailsService = new JdbcClientDetailsService(dataSource);
         return clientDetailsService;
     }
 
     @Bean // 声明 ClientDetails实现
-    @ConditionalOnProperty(prefix = "security.oauth2.clientDetails.store", name = "type", havingValue = "redis", matchIfMissing=false)
+    @ConditionalOnProperty(prefix = "security.oauth2.clientDetails.load", name = "type", havingValue = "redis", matchIfMissing=false)
     public RedisClientDetailsService redisClientDetailsService() {
         RedisClientDetailsService clientDetailsService = new RedisClientDetailsService(dataSource);
         clientDetailsService.setRedisTemplate(redisTemplate);
