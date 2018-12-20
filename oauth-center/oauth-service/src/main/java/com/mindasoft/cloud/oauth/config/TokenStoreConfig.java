@@ -73,7 +73,6 @@ public class TokenStoreConfig {
 		ClusterRedisTokenStore redisTemplateStore = new ClusterRedisTokenStore()  ;
 		redisTemplateStore.setRedisTemplate(redisTemplate);
 		return redisTemplateStore ;
-
 	}
 	
 	/**
