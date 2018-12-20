@@ -34,7 +34,7 @@ public class DefaultUserDetailsService implements UserDetailsService {
 		String password = passwordEncoder.encode("admin") ;
 		System.out.println("#########" + password);
 
-		//123456模拟从数据库中查询得到的
+		//模拟从数据库中查询得到的
 		User user = new User(username,password,	AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER,ROLE_ADMIN"));
 		return user;
 	}

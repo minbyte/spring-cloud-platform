@@ -1,15 +1,52 @@
-logging:
-  level.root: info
+spring:
+  redis:
+    open: true  # 是否开启redis缓存  true开启   false关闭
+    database: 4
+    host: localhost
+    port: 6379
+    password:    # 密码（默认为空）
+    timeout: 6000ms  # 连接超时时长（毫秒）
+    jedis:
+      pool:
+        max-active: 1000  # 连接池最大连接数（使用负值表示没有限制）
+        max-wait: -1ms      # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-idle: 10      # 连接池中的最大空闲连接
+        min-idle: 5       # 连接池中的最小空闲连接
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    druid:
+      url: jdbc:mysql://localhost:3306/scp_oauth?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+      username: root
+      password:
+      initial-size: 1
+      max-active: 10
+      min-idle: 1
+      max-wait: 60000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      #validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      stat-view-servlet:
+          enabled: true
+          url-pattern: /druid/*
+          #login-username: admin
+          #login-password: admin
+      filter:
+          stat:
+              log-slow-sql: true
+              slow-sql-millis: 1000
+              merge-sql: false
+          wall:
+              config:
+                  multi-statement-allow: true
 
-#eureka
-eureka:
-  instance:
-    prefer-ip-address: true
-    lease-renewal-interval-in-seconds: 5
-    lease-expiration-duration-in-seconds: 20
-  client:
-    serviceUrl:
-      # 服务注册中心地址
-      defaultZone: http://localhost:7000/eureka
-      # 表示eureka client间隔多久去拉取服务注册信息，默认为30秒
-    registry-fetch-interval-seconds: 10
+security:
+  oauth2:
+    token:
+      store:
+        type: jdbc  # inMemory，jdbc，redis，clusterRedis，jwt。

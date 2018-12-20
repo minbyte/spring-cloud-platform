@@ -15,6 +15,13 @@ spring:
           - Path=/admin/**
         filters:
           - StripPrefix=1        # StripPrefix=1  /admin/**，只保留**部分
+      - id: OAUTH-SERVICE
+        uri: lb://OAUTH-SERVICE
+        predicates:
+          - Path=/oauth/**
+        filters:
+          - StripPrefix=1
+
 
 ignore:
   urls:

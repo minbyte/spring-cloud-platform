@@ -26,30 +26,24 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private AuthenticationManager authenticationManager;
 
     /**
-     * client客户端的信息配置
+     * client客户端的信息配置，配置客户端详情信息(内存或JDBC来实现)
      * @param clients
      * @throws Exception
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory() // 使用in-memory存储
-                .withClient("client") // client_id
-                .secret("{noop}secret") // client_secret
+                .withClient("console") // client_id
+                .secret("console") // client_secret
+                .scopes("web")  // 允许的授权范围
                 .authorizedGrantTypes("password", "authorization_code", "refresh_token", "implicit") // 该client允许的授权类型 "password", "authorization_code", "refresh_token", "implicit"
-                .scopes("app")  // 允许的授权范围
-                .accessTokenValiditySeconds(3600); // 1 hour
-    }
-
-    /**
-     * 声明安全约束，哪些允许访问，哪些不允许访问
-     * @param security
-     * @throws Exception
-     */
-    @Override
-    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        security.tokenKeyAccess("permitAll()")
-                .checkTokenAccess("isAuthenticated()")
-                .allowFormAuthenticationForClients();
+                .accessTokenValiditySeconds(3600);// 1 hour
+//
+//                .and()
+//                .withClient("app") // client_id
+//                .secret("app_android") // client_secret
+//                .authorizedGrantTypes("password", "authorization_code", "refresh_token", "implicit") // 该client允许的授权类型 "password", "authorization_code", "refresh_token", "implicit"
+//                .scopes("app");
     }
 
     /**
@@ -59,8 +53,24 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.tokenStore(tokenStore()).authenticationManager(authenticationManager);
+        endpoints.tokenStore(tokenStore())
+                .authenticationManager(authenticationManager);
     }
+
+    /**
+     * 声明安全约束，哪些允许访问，哪些不允许访问
+     * @param security
+     * @throws Exception
+     */
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+        //curl -i -X POST -H "Accept: application/json" -u "client_1:123456" http://localhost:5000/oauth/check_token?token=a1478d56-ebb8-4f21-b4b6-8a9602df24ec
+        security.tokenKeyAccess("permitAll()")  // url:/oauth/token_key,exposes public key for token verification if using JWT tokens 如果使用JWT令牌，则公开用于令牌验证的公钥
+                .checkTokenAccess("isAuthenticated()") // url:/oauth/check_token allow check token 允许检查令牌
+                .allowFormAuthenticationForClients();
+    }
+
+
 
     @Bean
     public TokenStore tokenStore() {
