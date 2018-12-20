@@ -1,4 +1,4 @@
-package com.mindasoft.cloud.oauth.config;
+package com.mindasoft.cloud.oauth.oauth2;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
