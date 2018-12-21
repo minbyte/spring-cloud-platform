@@ -25,27 +25,24 @@ public class BaseExceptionHandler {
 	 */
 	@ExceptionHandler(BaseException.class)
 	public R handleRRException(BaseException e){
-		R r = new R();
-		r.put("code", e.getCode());
-		r.put("msg", e.getMessage());
-		return r;
+		return R.fail(e.getCode(),e.getMessage());
 	}
 
 	@ExceptionHandler(NoHandlerFoundException.class)
 	public R handlerNoFoundException(Exception e) {
 		logger.error(e.getMessage(), e);
-		return R.error(404, "路径不存在，请检查路径是否正确");
+		return R.fail(404, "路径不存在，请检查路径是否正确");
 	}
 
 	@ExceptionHandler(DuplicateKeyException.class)
 	public R handleDuplicateKeyException(DuplicateKeyException e){
 		logger.error(e.getMessage(), e);
-		return R.error("数据库中已存在该记录");
+		return R.fail("数据库中已存在该记录");
 	}
 
 	@ExceptionHandler(Exception.class)
 	public R handleException(Exception e){
 		logger.error(e.getMessage(), e);
-		return R.error(CommonStateEnum.SYSTEM_ERROR);
+		return R.fail(CommonStateEnum.SYSTEM_ERROR);
 	}
 }

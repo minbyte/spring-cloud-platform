@@ -1,0 +1,44 @@
+# tomcat
+server:
+  port: 7020
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: security-service
+  profiles:
+    active: dev
+  # jackson时间格式化
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7000/eureka
+    healthcheck:
+      enabled: true
+    registry-fetch-interval-seconds: 5 #间隔多久去拉取服务注册信息，默认为30秒
+    instance-info-replication-interval-seconds: 10  # 实例信息变化报送间隔 30s
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${spring.application.instance_id:${server.port}}
+    lease-renewal-interval-in-seconds: 5    # 续eureka客户需要多长时间发送心跳给eureka服务器，表明它仍然活着,默认为30 秒
+    lease-expiration-duration-in-seconds: 10 # Eureka服务器在接收到实例的最后一次发出的心跳后，需要等待多久才可以将此实例删除，默认为90秒 EurekaServer一定要设置eureka.server.eviction-interval-timer-in-ms否则这个配置无效
+    #需要增加下面配置，告诉注册中心访问路径变化
+    status-page-url-path: /actuator/info
+    health-check-url-path: /actuator/health
+    home-page-url-path: /
+    metadataMap:
+      version: @version@
+      group: example-service-group
+      region: dev
+
+logging:
+  config: classpath:logback-spring.xml
+  level:
+    dao: debug
+    org:
+      mybatis: debug

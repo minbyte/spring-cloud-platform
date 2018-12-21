@@ -1,7 +1,7 @@
 端口  服务    启动顺序      说明
 7000 eureka    1        注册中心
 7010 gateway   2        网关
-7020 oauth     3        权限控制
+7020 security  3        权限控制
 7030 apollo    -        配置中心 7031,7032
 7040 monitor   -        监控
 

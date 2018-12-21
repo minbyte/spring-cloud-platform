@@ -9,16 +9,22 @@ spring:
         locator:      #路由访问方式：http://Gateway_HOST:Gateway_PORT/大写的serviceId/**，其中微服务应用名默认大写访问。
           enabled: true
       routes:
-      - id: ADMIN-SERVICE
-        uri: lb://ADMIN-SERVICE
+      - id: SECURITY-SERVICE
+        uri: lb://SECURITY-SERVICE
         predicates:
-          - Path=/admin/**
+          - Path=/security/** # StripPrefix=1  /security/**，只保留**部分
         filters:
-          - StripPrefix=1        # StripPrefix=1  /admin/**，只保留**部分
-      - id: OAUTH-SERVICE
-        uri: lb://OAUTH-SERVICE
+          - StripPrefix=1
+      - id: ADMINS-SERVICE
+        uri: lb://ADMINS-SERVICE
         predicates:
-          - Path=/oauth/**
+          - Path=/admins/**
+        filters:
+          - StripPrefix=1
+      - id: USERS-SERVICE
+        uri: lb://USERS-SERVICE
+        predicates:
+          - Path=/users/**
         filters:
           - StripPrefix=1
 

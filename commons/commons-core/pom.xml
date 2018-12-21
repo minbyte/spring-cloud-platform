@@ -54,7 +54,6 @@
             <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
