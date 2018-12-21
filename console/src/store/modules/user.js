@@ -30,10 +30,13 @@ const user = {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         login(username, userInfo.password).then(response => {
-          const data = response.data
-          setToken(data.token)
-          commit('SET_TOKEN', data.token)
-          resolve()
+          if (response.access_token) {
+            setToken(response.access_token)
+            commit('SET_TOKEN', response.access_token)
+            resolve()
+          } else {
+            reject('登录失败')
+          }
         }).catch(error => {
           reject(error)
         })

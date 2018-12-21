@@ -54,6 +54,12 @@
             <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
             <scope>provided</scope>
         </dependency>
+        <!-- oauth -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-oauth2</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

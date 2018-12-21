@@ -1,5 +1,6 @@
-package com.mindasoft.cloud.security.oauth2;
+package com.mindasoft.cloud.security.config;
 
+import com.mindasoft.cloud.security.oauth2.OAuth2Utils;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
 
 /**
+ * fegin 服务之间权限调用，不加会报401错误
  * @author: min
  * @date: 2018/12/21 10:55
  * @version: 1.0.0

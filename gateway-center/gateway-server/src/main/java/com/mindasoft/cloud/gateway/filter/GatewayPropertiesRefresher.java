@@ -13,7 +13,7 @@
 //import org.springframework.context.ApplicationEventPublisherAware;
 //import org.springframework.stereotype.Component;
 //
-//
+//Apollo配置中心动态文件刷新
 //@Component
 //public class GatewayPropertiesRefresher implements ApplicationEventPublisherAware {
 //

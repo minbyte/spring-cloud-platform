@@ -1,27 +1,33 @@
 import request from '@/utils/request'
+const querystring = require('querystring')
 
 export function login(username, password) {
   return request({
-    url: '/admin/login',
+    url: '/security/oauth/token',
     method: 'post',
-    data: {
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+    data: querystring.stringify({
       username,
-      password
-    }
+      password,
+      'grant_type': 'password',
+      'client_id': 'app',
+      'client_secret': '$2a$10$i3F515wEDiB4Gvj9ym9Prui0dasRttEUQ9ink4Wpgb4zEDCAlV8zO',
+      'scope': 'app'
+    })
   })
 }
 
-export function getInfo(token) {
+export function getInfo(access_token) {
   return request({
-    url: '/admin/info',
+    url: '/admins/admin/info',
     method: 'get',
-    params: { token }
+    params: { access_token }
   })
 }
 
 export function logout() {
   return request({
-    url: '/admin/logout',
+    url: '/admins/admin/logout',
     method: 'post'
   })
 }

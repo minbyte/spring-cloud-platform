@@ -12,6 +12,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.common.exceptions.*;
 import org.springframework.security.oauth2.provider.error.DefaultWebResponseExceptionTranslator;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
@@ -104,8 +105,8 @@ public class SecurityHandlerConfig {
 
 			@Override
 			public ResponseEntity<OAuth2Exception> translate(Exception e) throws Exception {
-				// e.printStackTrace();
 				OAuth2Exception oAuth2Exception;
+				System.out.println(e.getMessage());
 				if (e.getMessage() != null && e.getMessage().equals(BAD_MSG)) {
 					oAuth2Exception = new InvalidGrantException("用户名或密码错误", e);
 				} else if (e instanceof InternalAuthenticationServiceException) {

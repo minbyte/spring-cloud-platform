@@ -64,18 +64,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         }else if(null != redisClientDetailsService){
             clients.withClientDetails(redisClientDetailsService);
         }
-//        clients.inMemory() // 使用in-memory存储
-//                .withClient("console") // client_id
-//                .secret("console") // client_secret
-//                .scopes("web")  // 允许的授权范围
-//                .authorizedGrantTypes("password", "authorization_code", "refresh_token", "implicit") // 该client允许的授权类型 "password", "authorization_code", "refresh_token", "implicit"
-//                .accessTokenValiditySeconds(3600);// 1 hour
-//
-//                .and()
-//                .withClient("app") // client_id
-//                .secret("app_android") // client_secret
-//                .authorizedGrantTypes("password", "authorization_code", "refresh_token", "implicit") // 该client允许的授权类型 "password", "authorization_code", "refresh_token", "implicit"
-//                .scopes("app");
     }
 
     /**

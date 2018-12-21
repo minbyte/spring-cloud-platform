@@ -1,9 +1,13 @@
 package com.mindasoft.cloud.security.config;
 
+import com.mindasoft.cloud.commons.oauth2.AuthExceptionEntryPoint;
+import com.mindasoft.cloud.commons.oauth2.CustomAccessDeniedHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,6 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
+    @Autowired
+    private CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -27,5 +33,12 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();
+    }
+
+    @Override
+    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+        // 返回格式化
+        resources.authenticationEntryPoint(new AuthExceptionEntryPoint())
+                .accessDeniedHandler(customAccessDeniedHandler);
     }
 }
