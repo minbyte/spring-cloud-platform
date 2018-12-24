@@ -5,6 +5,7 @@ import com.mindasoft.cloud.admins.fallback.AdminFeignFallback;
 import com.mindasoft.cloud.commons.util.R;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = FeignClientInstances.name,fallback = AdminFeignFallback.class)
 public interface AdminFeign {
 
-    @GetMapping("/admin/infoByAdminId")
-    public R info(@RequestParam("adminId") String adminId);
+    @GetMapping("/admin/{adminId}")
+    public R info(@PathVariable("adminId") Long adminId);
 
 }

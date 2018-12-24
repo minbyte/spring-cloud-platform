@@ -11,8 +11,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AdminFeignFallback implements AdminFeign {
+
     @Override
-    public R info(String adminId) {
+    public R info(Long adminId) {
         return R.fail();
     }
 }
