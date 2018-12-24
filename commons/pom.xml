@@ -16,6 +16,7 @@
     <modules>
         <module>commons-core</module>
         <module>commons-redis</module>
+        <module>commons-models</module>
     </modules>
 
     <build>
