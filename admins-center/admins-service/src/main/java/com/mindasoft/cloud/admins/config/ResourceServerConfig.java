@@ -32,8 +32,8 @@ public class ResourceServerConfig  extends ResourceServerConfigurerAdapter {
             .and()
             .authorizeRequests() // 匹配需要资源认证路径
             .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security",
-                    "/swagger-ui.html", "/webjars/**", "/doc.html"
-            ).permitAll()            // 匹配不需要资源认证路径
+                    "/swagger-ui.html", "/webjars/**", "/doc.html","/admin/login")
+            .permitAll()            // 匹配不需要资源认证路径
             .anyRequest().authenticated()
             .and()
             .httpBasic();

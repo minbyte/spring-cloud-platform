@@ -1,22 +1,22 @@
 package com.mindasoft.cloud.admins.controller;
 
 import com.mindasoft.cloud.admins.entity.AdminEntity;
-import com.mindasoft.cloud.admins.param.LoginParam;
 import com.mindasoft.cloud.admins.service.AdminService;
+import com.mindasoft.cloud.commons.util.OAuth2Utils;
 import com.mindasoft.cloud.commons.util.PageUtils;
 import com.mindasoft.cloud.commons.util.R;
+import com.mindasoft.cloud.models.LoginPerson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.security.Principal;
+import java.util.*;
 
 /**
  * 管理员接口
@@ -32,20 +32,32 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    @PostMapping("/login")
+    @GetMapping(value = "/login", params = "username")
     @ApiOperation(value = "登陆")
-    public R login(@RequestBody LoginParam param){
-        if("admin".equals(param.getUsername()) && "admin".equals(param.getPassword())){
-            return R.ok().put(new HashMap<String,String>(){{put("token","admin");}});
-        }else{
-            return R.fail("登录失败");
+    public R<LoginPerson> login(String username){
+        AdminEntity adminEntity = adminService.getAdminByUsername(username);
+        if(null != adminEntity){
+            LoginPerson adminInfo = new LoginPerson();
+            BeanUtils.copyProperties(adminEntity,adminInfo);
+            adminInfo.setPermissions(new HashSet<String>(){{add("admins:admin:info");}});
+            return R.ok().put(adminInfo);
         }
+        return R.ok();
     }
 
     @PostMapping("/logout")
     @ApiOperation(value = "登出")
     public R logout(String token){
         return R.ok();
+    }
+
+    /**
+     * 通过获取信息
+     */
+    @GetMapping("/current")
+    @ApiOperation(value = "获取当前用户信息")
+    public R<LoginPerson> current(){
+        return R.ok().put(OAuth2Utils.getLoginPerson());
     }
 
     /**
@@ -63,7 +75,6 @@ public class AdminController {
         return R.ok().put(page);
     }
 
-
     /**
      * 信息
      */
@@ -73,21 +84,6 @@ public class AdminController {
     public R info(@PathVariable("adminId") Long adminId){
         AdminEntity admin = adminService.selectById(adminId);
         return R.ok().put(admin);
-    }
-
-    /**
-     * 信息
-     */
-    @GetMapping("/info")
-    @ApiOperation(value = "通过token获取信息")
-    public R info(String token){
-        HashMap map = new HashMap();
-        map.put("name","admin");
-        map.put("avatar","https://img.mgtv.com/imgotv-member/user/avt.jpg");
-        map.put("roles", new ArrayList<String>(){{
-            add("admin");
-        }});
-        return R.ok().put(map);
     }
 
     /**

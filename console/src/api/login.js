@@ -10,9 +10,9 @@ export function login(username, password) {
       username,
       password,
       'grant_type': 'password',
-      'client_id': 'app',
-      'client_secret': '$2a$10$i3F515wEDiB4Gvj9ym9Prui0dasRttEUQ9ink4Wpgb4zEDCAlV8zO',
-      'scope': 'app'
+      'client_id': 'webApp',
+      'client_secret': '$2a$10$06msMGYRH8nrm4iVnKFNKOoddB8wOwymVhbUzw/d3ZixD7Nq8ot72',
+      'scope': 'webApp'
     })
   })
 }

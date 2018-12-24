@@ -59,6 +59,8 @@ public class AdminEntity implements Serializable {
 	 */
 	private Date updateTime;
 
+	private Boolean enabled;
+
 	/**
 	 * 设置：管理员ID
 	 */
@@ -178,5 +180,13 @@ public class AdminEntity implements Serializable {
 	 */
 	public Date getUpdateTime() {
 		return updateTime;
+	}
+
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
 	}
 }

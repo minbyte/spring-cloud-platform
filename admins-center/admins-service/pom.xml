@@ -14,10 +14,15 @@
     <dependencies>
         <dependency>
             <groupId>com.mindasoft.cloud</groupId>
+            <artifactId>commons-models</artifactId>
+            <version>${commons.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mindasoft.cloud</groupId>
             <artifactId>admins-business</artifactId>
             <version>${project.version}</version>
         </dependency>
-
 
         <!-- 测试框架-->
         <dependency>

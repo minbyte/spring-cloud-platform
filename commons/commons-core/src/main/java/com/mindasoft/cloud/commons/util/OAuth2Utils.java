@@ -1,10 +1,19 @@
-package com.mindasoft.cloud.security.oauth2;
+package com.mindasoft.cloud.commons.util;
 
+import com.mindasoft.cloud.models.LoginPerson;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author: min
@@ -36,6 +45,27 @@ public class OAuth2Utils {
         }
         OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) authentication.getDetails();
         return details;
+    }
+
+    public static LoginPerson getLoginPerson() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof OAuth2Authentication) {
+            OAuth2Authentication oAuth2Auth = (OAuth2Authentication) authentication;
+            authentication = oAuth2Auth.getUserAuthentication();
+            if (authentication instanceof UsernamePasswordAuthenticationToken || authentication instanceof PreAuthenticatedAuthenticationToken){
+                LinkedHashMap authenticationToken = (LinkedHashMap) authentication.getDetails();
+                LoginPerson loginPerson = new LoginPerson();
+                try {
+                    BeanUtils.populate(loginPerson,(LinkedHashMap)authenticationToken.get("principal"));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+                return loginPerson ;
+            }
+        }
+        return null;
     }
 
     /**

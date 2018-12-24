@@ -25,4 +25,9 @@ public class AdminServiceImpl extends ServiceImpl<AdminDao, AdminEntity> impleme
         return new PageUtils(page);
     }
 
+    @Override
+    public AdminEntity getAdminByUsername(String username) {
+        return this.selectOne(new EntityWrapper<AdminEntity>().eq("username",username));
+    }
+
 }

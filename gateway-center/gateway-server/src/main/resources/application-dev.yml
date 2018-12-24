@@ -14,14 +14,14 @@ spring:
         predicates:
           - Path=/security/**
         filters:
-          - SwaggerHeaderFilter   # Swagger路径问题
+#          - SwaggerHeaderFilter   # Swagger路径问题
           - StripPrefix=1         # StripPrefix=1  /security/**，只保留**部分
       - id: ADMINS-SERVICE
         uri: lb://ADMINS-SERVICE
         predicates:
           - Path=/admins/**
         filters:
-          - SwaggerHeaderFilter
+#          - SwaggerHeaderFilter
           - StripPrefix=1
       - id: USERS-SERVICE
         uri: lb://USERS-SERVICE

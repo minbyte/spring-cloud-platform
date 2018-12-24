@@ -16,5 +16,7 @@ import java.util.Map;
 public interface AdminService extends IService<AdminEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    AdminEntity getAdminByUsername(String username);
 }
 

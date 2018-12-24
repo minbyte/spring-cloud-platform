@@ -1,8 +1,13 @@
 package com.mindasoft.cloud.security.oauth2;
 
+import com.alibaba.fastjson.JSON;
 import com.mindasoft.cloud.admins.feign.AdminFeign;
+import com.mindasoft.cloud.commons.util.R;
+import com.mindasoft.cloud.models.LoginPerson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,13 +39,18 @@ public class DefaultUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		System.out.println("页面输入的用户名："+username);
-		String password = passwordEncoder.encode("admin") ;
-		System.out.println("#########" + password);
-
-		//模拟从数据库中查询得到的
-		User user = new User(username,password,	AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER,ROLE_ADMIN"));
-		return user;
+		R<LoginPerson> res = adminFeign.loginInfo(username);
+		System.out.println(JSON.toJSONString(res));
+		if(res.isOk()){
+			return res.getData();
+		}else{
+			if (res.getData() == null) {
+				throw new AuthenticationCredentialsNotFoundException("用户不存在");
+			} else if (!res.getData().isEnabled()) {
+				throw new DisabledException("用户已作废");
+			}
+		}
+		return null;
 	}
 
 }
