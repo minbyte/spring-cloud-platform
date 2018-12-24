@@ -30,8 +30,8 @@ public class LoginPerson implements UserDetails {
     private String avatar;
     private Boolean enabled;
 
-    private Set<String> roles;
-    private Set<String> permissions;
+    private Collection<String> roles;
+    private Collection<String> permissions;
 
     /***
      * 权限重写
@@ -77,5 +77,9 @@ public class LoginPerson implements UserDetails {
     @Override
     public boolean isEnabled() {
         return getEnabled();
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 }

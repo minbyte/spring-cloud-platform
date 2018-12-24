@@ -54,9 +54,11 @@ public class OAuth2Utils {
             authentication = oAuth2Auth.getUserAuthentication();
             if (authentication instanceof UsernamePasswordAuthenticationToken || authentication instanceof PreAuthenticatedAuthenticationToken){
                 LinkedHashMap authenticationToken = (LinkedHashMap) authentication.getDetails();
+                LinkedHashMap principal = (LinkedHashMap)authenticationToken.get("principal");
                 LoginPerson loginPerson = new LoginPerson();
                 try {
-                    BeanUtils.populate(loginPerson,(LinkedHashMap)authenticationToken.get("principal"));
+                    BeanUtils.populate(loginPerson,principal);
+                    loginPerson.setEnabled((Boolean) principal.get("enabled"));
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 } catch (InvocationTargetException e) {

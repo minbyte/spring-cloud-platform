@@ -33,14 +33,6 @@ public class PrincipalController {
         return principal;
     }
 
-    @GetMapping("/current")
-    public R current(){
-        Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        LOGGER.debug("认证详细信息:" + SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
-
-        return R.ok();
-    }
-
     @GetMapping("/test")
     public String test(){
         R r = adminFeign.loginInfo("admin");
