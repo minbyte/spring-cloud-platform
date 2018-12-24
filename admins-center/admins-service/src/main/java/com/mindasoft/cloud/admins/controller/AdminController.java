@@ -40,6 +40,7 @@ public class AdminController {
             LoginPerson adminInfo = new LoginPerson();
             BeanUtils.copyProperties(adminEntity,adminInfo);
             adminInfo.setPermissions(new HashSet<String>(){{add("admins:admin:info");}});
+            adminInfo.setRoles(new ArrayList<String>(){{add("ROLE_admin");}});
             return R.ok().put(adminInfo);
         }
         return R.ok();

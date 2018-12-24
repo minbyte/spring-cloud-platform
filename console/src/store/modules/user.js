@@ -53,7 +53,7 @@ const user = {
           } else {
             reject('getInfo: roles must be a non-null array !')
           }
-          commit('SET_NAME', data.name)
+          commit('SET_NAME', data.nickname)
           commit('SET_AVATAR', data.avatar)
           resolve(response)
         }).catch(error => {

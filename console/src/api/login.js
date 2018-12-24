@@ -19,7 +19,7 @@ export function login(username, password) {
 
 export function getInfo(access_token) {
   return request({
-    url: '/admins/admin/info',
+    url: '/admins/admin/current',
     method: 'get',
     params: { access_token }
   })
