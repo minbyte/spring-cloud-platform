@@ -49,7 +49,7 @@
             { required: true, message: '角色名称不能为空', trigger: 'blur' }
           ]
         },
-        tempKey: -666666 // 临时key, 用于解决tree半选中状态项不能传给后台接口问题. # 待优化
+        tempKey: 0 // 临时key, 用于解决tree半选中状态项不能传给后台接口问题. # 待优化
       }
     },
     methods: {
@@ -77,13 +77,13 @@
               params: {}
             }).then(response => {
               if (response && response.code === 0) {
-                this.dataForm.roleName = data.role.roleName
-                this.dataForm.remark = data.role.remark
-                var idx = data.role.menuIdList.indexOf(this.tempKey)
+                this.dataForm.roleName = response.data.roleName
+                this.dataForm.remark = response.data.remark
+                var idx = response.data.menuIdList.indexOf(this.tempKey)
                 if (idx !== -1) {
-                  data.role.menuIdList.splice(idx, data.role.menuIdList.length - idx)
+                  response.data.menuIdList.splice(idx,response.data.menuIdList.length - idx)
                 }
-                this.$refs.menuListTree.setCheckedKeys(data.role.menuIdList)
+                this.$refs.menuListTree.setCheckedKeys(response.data.menuIdList)
               }
             })
           }
