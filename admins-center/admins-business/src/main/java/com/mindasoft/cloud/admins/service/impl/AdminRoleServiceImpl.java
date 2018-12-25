@@ -32,7 +32,7 @@ public class AdminRoleServiceImpl extends ServiceImpl<AdminRoleDao, AdminRoleEnt
     @Override
     public void saveOrUpdate(Long adminId, List<Long> roleIdList) {
         //先删除用户与角色关系
-        this.deleteByMap(new MapUtils().put("adminId", adminId));
+        this.deleteByMap(new MapUtils().put("admin_id", adminId));
 
         if(roleIdList == null || roleIdList.size() == 0){
             return ;

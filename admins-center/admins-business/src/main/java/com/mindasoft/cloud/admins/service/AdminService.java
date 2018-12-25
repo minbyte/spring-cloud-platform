@@ -20,7 +20,7 @@ public interface AdminService extends IService<AdminEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     /**
-     * 根据用户名，查询系统用户
+     * 根据管理员名，查询系统管理员
      * @param username
      * @return
      */
@@ -28,15 +28,26 @@ public interface AdminService extends IService<AdminEntity> {
 
 
     /**
-     * 查询用户的所有权限
+     * 查询管理员的所有权限
      * @param adminId  管理员ID
      */
     List<String> queryAllPerms(Long adminId);
 
     /**
-     * 查询用户的所有菜单ID
+     * 查询管理员的所有菜单ID
      */
     List<Long> queryAllMenuId(Long adminId);
+
+    /**
+     * 保存管理员
+     */
+    void save(AdminEntity admin);
+
+    /**
+     * 修改管理员
+     */
+    void update(AdminEntity admin);
+
 
     /**
      * 修改密码
@@ -45,5 +56,7 @@ public interface AdminService extends IService<AdminEntity> {
      * @param newPassword  新密码
      */
     boolean updatePassword(Long adminId, String password, String newPassword);
+
+    
 }
 

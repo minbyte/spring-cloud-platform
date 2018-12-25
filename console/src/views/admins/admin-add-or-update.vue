@@ -24,10 +24,10 @@
           <el-checkbox v-for="role in roleList" :key="role.roleId" :label="role.roleId">{{ role.roleName }}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
-      <el-form-item label="状态" size="mini" prop="status">
-        <el-radio-group v-model="dataForm.status">
-          <el-radio :label="0">禁用</el-radio>
-          <el-radio :label="1">正常</el-radio>
+      <el-form-item label="状态" size="mini" prop="enabled">
+        <el-radio-group v-model="dataForm.enabled">
+          <el-radio :label="false">禁用</el-radio>
+          <el-radio :label="true">正常</el-radio>
         </el-radio-group>
       </el-form-item>
     </el-form>
@@ -84,7 +84,7 @@
           email: '',
           mobile: '',
           roleIdList: [],
-          status: 1
+          enabled: true
         },
         dataRule: {
           userName: [
@@ -134,7 +134,7 @@
                 this.dataForm.email = response.data.email
                 this.dataForm.mobile = response.data.mobile
                 this.dataForm.roleIdList = response.data.roleIdList
-                this.dataForm.status = response.data.status
+                this.dataForm.enabled = response.data.enabled
               }
             })
           }
@@ -154,7 +154,7 @@
                 'salt': this.dataForm.salt,
                 'email': this.dataForm.email,
                 'mobile': this.dataForm.mobile,
-                'status': this.dataForm.status,
+                'enabled': this.dataForm.enabled,
                 'roleIdList': this.dataForm.roleIdList
               }
             }).then(response => {

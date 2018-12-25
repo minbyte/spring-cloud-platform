@@ -1,10 +1,14 @@
 package com.mindasoft.cloud.admins.service.impl;
 
+import com.mindasoft.cloud.admins.constants.Constant;
 import com.mindasoft.cloud.admins.dao.AdminRoleDao;
 import com.mindasoft.cloud.admins.dao.MenuDao;
 import com.mindasoft.cloud.admins.dao.RoleMenuDao;
 import com.mindasoft.cloud.admins.entity.MenuEntity;
 import com.mindasoft.cloud.admins.entity.RoleEntity;
+import com.mindasoft.cloud.admins.service.AdminRoleService;
+import com.mindasoft.cloud.admins.service.RoleService;
+import com.mindasoft.cloud.commons.exception.BaseException;
 import com.mindasoft.cloud.models.LoginPerson;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -23,6 +27,7 @@ import com.mindasoft.cloud.commons.util.Query;
 import com.mindasoft.cloud.admins.dao.AdminDao;
 import com.mindasoft.cloud.admins.entity.AdminEntity;
 import com.mindasoft.cloud.admins.service.AdminService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 
@@ -35,6 +40,10 @@ public class AdminServiceImpl extends ServiceImpl<AdminDao, AdminEntity> impleme
     private RoleMenuDao roleMenuDao;
     @Autowired
     private MenuDao menuDao;
+    @Autowired
+    private AdminRoleService adminRoleService;
+    @Autowired
+    private RoleService roleService;
 
 
     @Override
@@ -94,7 +103,61 @@ public class AdminServiceImpl extends ServiceImpl<AdminDao, AdminEntity> impleme
     }
 
     @Override
+    @Transactional
+    public void save(AdminEntity admin) {
+        //sha256加密
+//        String salt = RandomStringUtils.randomAlphanumeric(20);
+//        user.setPassword(new Sha256Hash(user.getPassword(), salt).toHex());
+//        user.setSalt(salt);
+        this.insert(admin);
+
+        //检查角色是否越权
+        checkRole(admin);
+
+        //保存用户与角色关系
+        adminRoleService.saveOrUpdate(admin.getAdminId(), admin.getRoleIdList());
+    }
+
+    @Override
+    @Transactional
+    public void update(AdminEntity admin) {
+        if(StringUtils.isBlank(admin.getPassword())){
+            admin.setPassword(null);
+        }else{
+//            admin.setPassword(new Sha256Hash(user.getPassword(), user.getSalt()).toHex());
+        }
+        this.updateById(admin);
+
+        //检查角色是否越权
+        checkRole(admin);
+
+        //保存用户与角色关系
+        adminRoleService.saveOrUpdate(admin.getAdminId(), admin.getRoleIdList());
+    }
+
+    @Override
     public boolean updatePassword(Long adminId, String password, String newPassword) {
         return false;
+    }
+
+    /**
+     * 检查角色是否越权
+     */
+    private void checkRole(AdminEntity admin){
+        if(admin.getRoleIdList() == null || admin.getRoleIdList().size() == 0){
+            return;
+        }
+        //如果不是超级管理员，则需要判断用户的角色是否自己创建
+        if(admin.getCreateAdminId() == Constant.SUPER_ADMIN){
+            return ;
+        }
+
+        //查询用户创建的角色列表
+        List<Long> roleIdList = roleService.queryRoleIdList(admin.getCreateAdminId());
+
+        //判断是否越权
+        if(!roleIdList.containsAll(admin.getRoleIdList())){
+            throw new BaseException("新增用户所选角色，不是本人创建");
+        }
     }
 }

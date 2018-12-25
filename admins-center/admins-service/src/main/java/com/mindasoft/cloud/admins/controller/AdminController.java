@@ -105,7 +105,7 @@ public class AdminController {
     public R save(@RequestBody AdminEntity admin){
         ValidatorUtils.validateEntity(admin, AddGroup.class);
         admin.setCreateAdminId(OAuth2Utils.getId());
-        adminService.insert(admin);
+        adminService.save(admin);
         return R.ok();
     }
 
@@ -118,7 +118,7 @@ public class AdminController {
     public R update(@RequestBody AdminEntity admin){
         ValidatorUtils.validateEntity(admin, UpdateGroup.class);
         admin.setCreateAdminId(OAuth2Utils.getId());
-        adminService.updateById(admin);
+        adminService.update(admin);
         return R.ok();
     }
 
