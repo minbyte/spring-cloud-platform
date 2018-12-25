@@ -127,11 +127,13 @@
       init (id) {
         this.dataForm.id = id || 0
         this.$http({
-          url: this.$http.adornUrl('/sys/menu/select'),
+          url: '/admins/menu/select',
           method: 'get',
-          params: this.$http.adornParams()
-        }).then(({data}) => {
-          this.menuList = treeDataTranslate(data.menuList, 'menuId')
+          params: {}
+        }).then(response => {
+          if (response && response.code === 0) {
+            this.menuList = treeDataTranslate(response.data, 'menuId')
+          }
         }).then(() => {
           this.visible = true
           this.$nextTick(() => {
@@ -144,19 +146,21 @@
           } else {
             // 修改
             this.$http({
-              url: this.$http.adornUrl(`/sys/menu/info/${this.dataForm.id}`),
+              url: `/admins/menu/info/${this.dataForm.id}`,
               method: 'get',
               params: this.$http.adornParams()
-            }).then(({data}) => {
-              this.dataForm.id = data.menu.menuId
-              this.dataForm.type = data.menu.type
-              this.dataForm.name = data.menu.name
-              this.dataForm.parentId = data.menu.parentId
-              this.dataForm.url = data.menu.url
-              this.dataForm.perms = data.menu.perms
-              this.dataForm.orderNum = data.menu.orderNum
-              this.dataForm.icon = data.menu.icon
-              this.menuListTreeSetCurrentNode()
+            }).then(response => {
+              if (response && response.code === 0) {
+                this.dataForm.id = response.data.menuId
+                this.dataForm.type = response.data.type
+                this.dataForm.name = response.data.name
+                this.dataForm.parentId = response.data.parentId
+                this.dataForm.url = response.data.url
+                this.dataForm.perms = response.data.perms
+                this.dataForm.orderNum = response.data.orderNum
+                this.dataForm.icon = response.data.icon
+                this.menuListTreeSetCurrentNode()
+              }
             })
           }
         })
@@ -180,9 +184,9 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
-              url: this.$http.adornUrl(`/sys/menu/${!this.dataForm.id ? 'save' : 'update'}`),
-              method: 'post',
-              data: this.$http.adornData({
+              url: `/admins/menu/${!this.dataForm.id ? 'save' : 'update'}`,
+              method: !this.dataForm.id ? 'post' : 'put',
+              data: {
                 'menuId': this.dataForm.id || undefined,
                 'type': this.dataForm.type,
                 'name': this.dataForm.name,
@@ -191,9 +195,9 @@
                 'perms': this.dataForm.perms,
                 'orderNum': this.dataForm.orderNum,
                 'icon': this.dataForm.icon
-              })
-            }).then(({data}) => {
-              if (data && data.code === 0) {
+              }
+            }).then(response => {
+              if (response && response.code === 0) {
                 this.$message({
                   message: '操作成功',
                   type: 'success',

@@ -1,10 +1,12 @@
 <template>
-  <div class="mod-menu">
+  <div class="app-container">
+    <div class="filter-container">
     <el-form :inline="true" :model="dataForm">
       <el-form-item>
-        <el-button v-if="isAuth('sys:user:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('admins:menu:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
       </el-form-item>
     </el-form>
+    </div>
     <el-table
       :data="dataList"
       border
@@ -78,8 +80,8 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button v-if="isAuth('sys:user:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.menuId)">修改</el-button>
-          <el-button v-if="isAuth('sys:user:delete')" type="text" size="small" @click="deleteHandle(scope.row.menuId)">删除</el-button>
+          <el-button v-if="isAuth('admins:menu:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.menuId)">修改</el-button>
+          <el-button v-if="isAuth('admins:menu:delete')" type="text" size="small" @click="deleteHandle(scope.row.menuId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -113,11 +115,13 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/sys/menu/list'),
+          url: '/admins/menu/list',
           method: 'get',
-          params: this.$http.adornParams()
-        }).then(({data}) => {
-          this.dataList = treeDataTranslate(data, 'menuId')
+          params: {}
+        }).then(response => {
+          if (response && response.code === 0) {
+            this.dataList = treeDataTranslate(response.data, 'menuId')
+          }
           this.dataListLoading = false
         })
       },
@@ -136,11 +140,11 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl(`/sys/menu/delete/${id}`),
+            url: `/admins/menu/delete/${id}`,
             method: 'post',
-            data: this.$http.adornData()
-          }).then(({data}) => {
-            if (data && data.code === 0) {
+            data: {}
+          }).then(response => {
+            if (response && response.code === 0) {
               this.$message({
                 message: '操作成功',
                 type: 'success',

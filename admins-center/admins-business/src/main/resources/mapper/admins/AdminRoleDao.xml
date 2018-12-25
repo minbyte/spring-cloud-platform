@@ -27,4 +27,15 @@
         SELECT * FROM tb_admin_role WHERE role_id = #{roleId}
     </select>
 
+    <delete id="deleteBatch">
+        delete from tb_admin_role where role_id in
+        <foreach item="roleId" collection="array" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </delete>
+
+    <select id="queryRoleIdList" resultType="java.lang.Long">
+        select role_id from tb_admin_role where admin_id = #{value}
+    </select>
+
 </mapper>

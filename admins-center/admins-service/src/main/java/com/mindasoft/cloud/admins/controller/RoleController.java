@@ -105,7 +105,7 @@ public class RoleController {
         ValidatorUtils.validateEntity(role);
         role.setCreateAdminId(OAuth2Utils.getId());
 
-        roleService.insert(role);
+        roleService.save(role);
         return R.ok();
     }
 
@@ -119,7 +119,7 @@ public class RoleController {
         ValidatorUtils.validateEntity(role);
         role.setCreateAdminId(OAuth2Utils.getId());
 
-        roleService.updateById(role);
+        roleService.update(role);
         return R.ok();
     }
 

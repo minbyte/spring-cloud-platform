@@ -19,5 +19,5 @@ public interface RoleDao extends BaseMapper<RoleEntity> {
     /**
      * 查询用户创建的角色ID列表
      */
-    List<Long> queryRoleIdList(Long createUserId);
+    List<Long> queryRoleIdList(Long createAdminId);
 }
