@@ -1,10 +1,12 @@
 package com.mindasoft.cloud.admins.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 菜单管理
@@ -30,6 +32,13 @@ public class MenuEntity implements Serializable {
 	 * 菜单名称
 	 */
 	private String name;
+
+	/**
+	 * 父菜单名称
+	 */
+	@TableField(exist=false)
+	private String parentName;
+
 	/**
 	 * 菜单URL
 	 */
@@ -50,6 +59,15 @@ public class MenuEntity implements Serializable {
 	 * 排序
 	 */
 	private Integer orderNum;
+
+	/**
+	 * ztree属性
+	 */
+	@TableField(exist=false)
+	private Boolean open;
+
+	@TableField(exist=false)
+	private List<?> list;
 
 	/**
 	 * 设置：
@@ -146,5 +164,29 @@ public class MenuEntity implements Serializable {
 	 */
 	public Integer getOrderNum() {
 		return orderNum;
+	}
+
+	public String getParentName() {
+		return parentName;
+	}
+
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
+	}
+
+	public Boolean getOpen() {
+		return open;
+	}
+
+	public void setOpen(Boolean open) {
+		this.open = open;
+	}
+
+	public List<?> getList() {
+		return list;
+	}
+
+	public void setList(List<?> list) {
+		this.list = list;
 	}
 }

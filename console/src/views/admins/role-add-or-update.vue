@@ -56,11 +56,13 @@
       init (id) {
         this.dataForm.id = id || 0
         this.$http({
-          url: this.$http.adornUrl('/sys/menu/list'),
+          url: '/admins/menu/list',
           method: 'get',
-          params: this.$http.adornParams()
-        }).then(({data}) => {
-          this.menuList = treeDataTranslate(data, 'menuId')
+          params: {}
+        }).then(response => {
+          if (response && response.code === 0) {
+            this.menuList = treeDataTranslate(response.data, 'menuId')
+          }
         }).then(() => {
           this.visible = true
           this.$nextTick(() => {
@@ -70,11 +72,11 @@
         }).then(() => {
           if (this.dataForm.id) {
             this.$http({
-              url: this.$http.adornUrl(`/sys/role/info/${this.dataForm.id}`),
+              url: `/admins/role/info/${this.dataForm.id}`,
               method: 'get',
-              params: this.$http.adornParams()
-            }).then(({data}) => {
-              if (data && data.code === 0) {
+              params: {}
+            }).then(response => {
+              if (response && response.code === 0) {
                 this.dataForm.roleName = data.role.roleName
                 this.dataForm.remark = data.role.remark
                 var idx = data.role.menuIdList.indexOf(this.tempKey)
@@ -92,16 +94,16 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
-              url: this.$http.adornUrl(`/sys/role/${!this.dataForm.id ? 'save' : 'update'}`),
-              method: 'post',
-              data: this.$http.adornData({
+              url: `/admins/role/${!this.dataForm.id ? 'save' : 'update'}`,
+              method: !this.dataForm.id ? 'post' : 'put',
+              data: {
                 'roleId': this.dataForm.id || undefined,
                 'roleName': this.dataForm.roleName,
                 'remark': this.dataForm.remark,
                 'menuIdList': [].concat(this.$refs.menuListTree.getCheckedKeys(), [this.tempKey], this.$refs.menuListTree.getHalfCheckedKeys())
-              })
-            }).then(({data}) => {
-              if (data && data.code === 0) {
+              }
+            }).then(response => {
+              if (response && response.code === 0) {
                 this.$message({
                   message: '操作成功',
                   type: 'success',

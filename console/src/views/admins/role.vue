@@ -1,15 +1,18 @@
 <template>
-  <div class="mod-role">
-    <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
-      <el-form-item>
-        <el-input v-model="dataForm.roleName" placeholder="角色名称" clearable></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('sys:role:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('sys:role:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
-      </el-form-item>
-    </el-form>
+  <div class="app-container">
+    <div class="filter-container">
+      <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
+        <el-form-item>
+          <el-input v-model="dataForm.roleName" placeholder="角色名称" clearable></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="getDataList()">查询</el-button>
+          <el-button v-if="isAuth('admins:role:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+          <el-button v-if="isAuth('admins:role:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+
     <el-table
       :data="dataList"
       border
@@ -55,8 +58,8 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button v-if="isAuth('sys:role:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.roleId)">修改</el-button>
-          <el-button v-if="isAuth('sys:role:delete')" type="text" size="small" @click="deleteHandle(scope.row.roleId)">删除</el-button>
+          <el-button v-if="isAuth('admins:role:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.roleId)">修改</el-button>
+          <el-button v-if="isAuth('admins:role:delete')" type="text" size="small" @click="deleteHandle(scope.row.roleId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -94,31 +97,31 @@
     components: {
       AddOrUpdate
     },
-    activated () {
+    created () {
       this.getDataList()
     },
     methods: {
       // 获取数据列表
       getDataList () {
-        // this.dataListLoading = true
-        // this.$http({
-        //   url: this.$http.adornUrl('/sys/role/list'),
-        //   method: 'get',
-        //   params: this.$http.adornParams({
-        //     'page': this.pageIndex,
-        //     'limit': this.pageSize,
-        //     'roleName': this.dataForm.roleName
-        //   })
-        // }).then(({data}) => {
-        //   if (data && data.code === 0) {
-        //     this.dataList = data.page.list
-        //     this.totalPage = data.page.totalCount
-        //   } else {
-        //     this.dataList = []
-        //     this.totalPage = 0
-        //   }
-        //   this.dataListLoading = false
-        // })
+        this.dataListLoading = true
+        this.$http({
+          url: '/admins/role/list',
+          method: 'get',
+          params: {
+            'page': this.pageIndex,
+            'limit': this.pageSize,
+            'roleName': this.dataForm.roleName
+          }
+        }).then(response => {
+          if (response && response.code === 0) {
+            this.dataList = response.data.list
+            this.totalPage = response.data.totalCount
+          } else {
+            this.dataList = []
+            this.totalPage = 0
+          }
+          this.dataListLoading = false
+        })
       },
       // 每页数
       sizeChangeHandle (val) {
@@ -144,20 +147,20 @@
       },
       // 删除
       deleteHandle (id) {
-        var ids = id ? [id] : this.dataListSelections.map(item => {
+        var roleIds = id ? [id] : this.dataListSelections.map(item => {
           return item.roleId
         })
-        this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
+        this.$confirm(`确定对[id=${roleIds.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/sys/role/delete'),
+            url: '/admins/role/delete',
             method: 'post',
-            data: this.$http.adornData(ids, false)
-          }).then(({data}) => {
-            if (data && data.code === 0) {
+            data: roleIds
+          }).then(response => {
+            if (response && response.code === 0) {
               this.$message({
                 message: '操作成功',
                 type: 'success',
@@ -167,7 +170,7 @@
                 }
               })
             } else {
-              this.$message.error(data.msg)
+              this.$message.error(response.msg)
             }
           })
         }).catch(() => {})

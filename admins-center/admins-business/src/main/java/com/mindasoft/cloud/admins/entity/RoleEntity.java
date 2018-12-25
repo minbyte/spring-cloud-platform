@@ -1,10 +1,12 @@
 package com.mindasoft.cloud.admins.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 角色
@@ -34,6 +36,13 @@ public class RoleEntity implements Serializable {
 	 * 创建者ID
 	 */
 	private Long createAdminId;
+
+	/**
+	 * 角色菜单ID
+	 */
+	@TableField(exist=false)
+	private List<Long> menuIdList;
+
 	/**
 	 * 创建时间
 	 */
@@ -114,5 +123,13 @@ public class RoleEntity implements Serializable {
 	 */
 	public Date getUpdateTime() {
 		return updateTime;
+	}
+
+	public List<Long> getMenuIdList() {
+		return menuIdList;
+	}
+
+	public void setMenuIdList(List<Long> menuIdList) {
+		this.menuIdList = menuIdList;
 	}
 }

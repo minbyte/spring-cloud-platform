@@ -1,15 +1,20 @@
 package com.mindasoft.cloud.admins.controller;
 
 import com.mindasoft.cloud.admins.entity.AdminEntity;
+import com.mindasoft.cloud.admins.service.AdminRoleService;
 import com.mindasoft.cloud.admins.service.AdminService;
 import com.mindasoft.cloud.commons.util.OAuth2Utils;
 import com.mindasoft.cloud.commons.util.PageUtils;
 import com.mindasoft.cloud.commons.util.R;
+import com.mindasoft.cloud.commons.validator.ValidatorUtils;
+import com.mindasoft.cloud.commons.validator.group.AddGroup;
+import com.mindasoft.cloud.commons.validator.group.UpdateGroup;
 import com.mindasoft.cloud.models.LoginPerson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,6 +36,8 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
+    @Autowired
+    private AdminRoleService adminRoleService;
 
     @GetMapping(value = "/login", params = "username")
     @ApiOperation(value = "登陆")
@@ -80,6 +87,12 @@ public class AdminController {
     @ApiOperation(value = "信息")
     public R info(@PathVariable("adminId") Long adminId){
         AdminEntity admin = adminService.selectById(adminId);
+        if(null != admin){
+            //获取用户所属的角色列表
+            List<Long> roleIdList = adminRoleService.queryRoleIdList(adminId);
+            admin.setRoleIdList(roleIdList);
+        }
+
         return R.ok().put(admin);
     }
 
@@ -90,6 +103,8 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admins:admin:save')")
     @ApiOperation(value = "保存")
     public R save(@RequestBody AdminEntity admin){
+        ValidatorUtils.validateEntity(admin, AddGroup.class);
+        admin.setCreateAdminId(OAuth2Utils.getId());
         adminService.insert(admin);
         return R.ok();
     }
@@ -101,6 +116,8 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admins:admin:update')")
     @ApiOperation(value = "修改")
     public R update(@RequestBody AdminEntity admin){
+        ValidatorUtils.validateEntity(admin, UpdateGroup.class);
+        admin.setCreateAdminId(OAuth2Utils.getId());
         adminService.updateById(admin);
         return R.ok();
     }
@@ -112,12 +129,13 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admins:admin:delete')")
     @ApiOperation(value = "删除")
     public R delete(@RequestBody Long[] adminIds){
-        List<Long> adminIdList = Arrays.asList(adminIds);
-        if(adminIdList.contains(Long.valueOf(1))){
-            return R.fail("管理员不能删除");
+        if(ArrayUtils.contains(adminIds, 1L)){
+            return R.fail("系统管理员不能删除");
         }
-
-        adminService.deleteBatchIds(adminIdList);
+        if(ArrayUtils.contains(adminIds, OAuth2Utils.getId())){
+            return R.fail("当前用户不能删除");
+        }
+        adminService.deleteBatchIds(Arrays.asList(adminIds));
         return R.ok();
     }
 

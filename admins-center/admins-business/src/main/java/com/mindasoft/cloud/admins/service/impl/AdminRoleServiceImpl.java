@@ -1,6 +1,10 @@
 package com.mindasoft.cloud.admins.service.impl;
 
+import com.mindasoft.cloud.commons.util.MapUtils;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -23,6 +27,37 @@ public class AdminRoleServiceImpl extends ServiceImpl<AdminRoleDao, AdminRoleEnt
                 new EntityWrapper<AdminRoleEntity>()
         );
         return new PageUtils(page);
+    }
+
+    @Override
+    public void saveOrUpdate(Long adminId, List<Long> roleIdList) {
+        //先删除用户与角色关系
+        this.deleteByMap(new MapUtils().put("adminId", adminId));
+
+        if(roleIdList == null || roleIdList.size() == 0){
+            return ;
+        }
+
+        //保存用户与角色关系
+        List<AdminRoleEntity> list = new ArrayList<>(roleIdList.size());
+        for(Long roleId : roleIdList){
+            AdminRoleEntity sysUserRoleEntity = new AdminRoleEntity();
+            sysUserRoleEntity.setAdminId(adminId);
+            sysUserRoleEntity.setRoleId(roleId);
+
+            list.add(sysUserRoleEntity);
+        }
+        this.insertBatch(list);
+    }
+
+    @Override
+    public List<Long> queryRoleIdList(Long adminId) {
+        return baseMapper.queryRoleIdList(adminId);
+    }
+
+    @Override
+    public int deleteBatch(Long[] roleIds) {
+        return baseMapper.deleteBatch(roleIds);
     }
 
 }

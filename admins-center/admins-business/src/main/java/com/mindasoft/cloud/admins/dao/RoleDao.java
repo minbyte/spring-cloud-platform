@@ -4,6 +4,8 @@ import com.mindasoft.cloud.admins.entity.RoleEntity;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * 角色
  * 
@@ -13,5 +15,9 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface RoleDao extends BaseMapper<RoleEntity> {
-	
+
+    /**
+     * 查询用户创建的角色ID列表
+     */
+    List<Long> queryRoleIdList(Long createUserId);
 }

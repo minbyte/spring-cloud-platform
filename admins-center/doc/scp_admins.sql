@@ -28,6 +28,7 @@ CREATE TABLE `tb_admin` (
   `email` varchar(64) DEFAULT NULL COMMENT '电子邮箱',
   `avatar` varchar(1000) DEFAULT NULL COMMENT '头像',
   `name` varchar(32) DEFAULT NULL COMMENT '真实姓名',
+  `create_admin_id` bigint(20) DEFAULT NULL COMMENT '创建者ID',
   `enabled` bit(1) DEFAULT b'1' COMMENT '状态 1正常 0禁用',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -37,9 +38,9 @@ CREATE TABLE `tb_admin` (
 
 /*Data for the table `tb_admin` */
 
-insert  into `tb_admin`(`admin_id`,`username`,`password`,`nickname`,`mobile`,`email`,`avatar`,`name`,`enabled`,`create_time`,`update_time`) values 
+insert  into `tb_admin`(`admin_id`,`username`,`password`,`nickname`,`mobile`,`email`,`avatar`,`name`,`create_admin_id`,`enabled`,`create_time`,`update_time`) values
 
-(1,'admin','admin','管理员','17377878899','hmiter@sina.com','https://img.mgtv.com/imgotv-member/user/avt.jpg',NULL,'','2018-12-21 17:17:58','2018-12-24 16:17:34');
+(1,'admin','admin','管理员','17377878899','hmiter@sina.com','https://img.mgtv.com/imgotv-member/user/avt.jpg',NULL,0,'','2018-12-21 17:17:58','2018-12-24 16:17:34');
 
 /*Table structure for table `tb_admin_role` */
 

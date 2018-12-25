@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mindasoft.cloud.admins.constants.Constant;
+import com.mindasoft.cloud.admins.service.RoleMenuService;
 import com.mindasoft.cloud.commons.util.OAuth2Utils;
+import com.mindasoft.cloud.commons.validator.ValidatorUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -34,6 +37,8 @@ import com.mindasoft.cloud.commons.util.R;
 public class RoleController {
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private RoleMenuService roleMenuService;
 
     /**
      * 角色列表
@@ -63,6 +68,12 @@ public class RoleController {
             @ApiImplicitParam(name = "limit",value = "分页结束位置", required = true)
     })
     public R list(@RequestParam Map<String, Object> params){
+        //如果不是超级管理员，则只查询自己创建的角色列表
+        Long adminId = OAuth2Utils.getId();
+        if(1 != adminId){
+            params.put("createAdminId", adminId);
+        }
+
         PageUtils page = roleService.queryPage(params);
         return R.ok().put(page);
     }
@@ -76,6 +87,11 @@ public class RoleController {
     @ApiOperation(value = "信息")
     public R info(@PathVariable("roleId") Long roleId){
         RoleEntity role = roleService.selectById(roleId);
+
+        //查询角色对应的菜单
+        List<Long> menuIdList = roleMenuService.queryMenuIdList(roleId);
+        role.setMenuIdList(menuIdList);
+
         return R.ok().put(role);
     }
 
@@ -86,6 +102,9 @@ public class RoleController {
     @PreAuthorize("hasAuthority('admins:role:save')")
     @ApiOperation(value = "保存")
     public R save(@RequestBody RoleEntity role){
+        ValidatorUtils.validateEntity(role);
+        role.setCreateAdminId(OAuth2Utils.getId());
+
         roleService.insert(role);
         return R.ok();
     }
@@ -97,6 +116,9 @@ public class RoleController {
     @PreAuthorize("hasAuthority('admins:role:update')")
     @ApiOperation(value = "修改")
     public R update(@RequestBody RoleEntity role){
+        ValidatorUtils.validateEntity(role);
+        role.setCreateAdminId(OAuth2Utils.getId());
+
         roleService.updateById(role);
         return R.ok();
     }
@@ -108,7 +130,7 @@ public class RoleController {
     @PreAuthorize("hasAuthority('admins:role:delete')")
     @ApiOperation(value = "删除")
     public R delete(@RequestBody Long[] roleIds){
-        roleService.deleteBatchIds(Arrays.asList(roleIds));
+        roleService.deleteBatch(roleIds);
         return R.ok();
     }
 

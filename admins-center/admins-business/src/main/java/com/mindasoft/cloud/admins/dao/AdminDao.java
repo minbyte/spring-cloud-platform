@@ -4,6 +4,8 @@ import com.mindasoft.cloud.admins.entity.AdminEntity;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * 管理员表
  * 
@@ -13,5 +15,17 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface AdminDao extends BaseMapper<AdminEntity> {
-	
+
+    /**
+     * 查询用户的所有权限
+     * @param adminId  用户ID
+     */
+    List<String> queryAllPerms(Long adminId);
+
+    /**
+     * 查询用户的所有菜单ID
+     */
+    List<Long> queryAllMenuId(Long adminId);
+
+
 }

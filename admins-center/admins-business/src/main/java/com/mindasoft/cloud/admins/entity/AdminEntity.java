@@ -1,10 +1,16 @@
 package com.mindasoft.cloud.admins.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.mindasoft.cloud.commons.validator.group.AddGroup;
+import com.mindasoft.cloud.commons.validator.group.UpdateGroup;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 管理员表
@@ -25,10 +31,12 @@ public class AdminEntity implements Serializable {
 	/**
 	 * 管理员账号
 	 */
+	@NotBlank(message="用户名不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String username;
 	/**
 	 * 密码
 	 */
+	@NotBlank(message="密码不能为空", groups = AddGroup.class)
 	private String password;
 	/**
 	 * 昵称
@@ -41,6 +49,8 @@ public class AdminEntity implements Serializable {
 	/**
 	 * 电子邮箱
 	 */
+	@NotBlank(message="邮箱不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@Email(message="邮箱格式不正确", groups = {AddGroup.class, UpdateGroup.class})
 	private String email;
 	/**
 	 * 头像
@@ -50,6 +60,18 @@ public class AdminEntity implements Serializable {
 	 * 真实姓名
 	 */
 	private String name;
+
+	/**
+	 * 角色ID列表
+	 */
+	@TableField(exist=false)
+	private List<Long> roleIdList;
+
+	/**
+	 * 创建者ID
+	 */
+	private Long createAdminId;
+
 	/**
 	 * 创建时间
 	 */
@@ -188,5 +210,21 @@ public class AdminEntity implements Serializable {
 
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public Long getCreateAdminId() {
+		return createAdminId;
+	}
+
+	public void setCreateAdminId(Long createAdminId) {
+		this.createAdminId = createAdminId;
+	}
+
+	public List<Long> getRoleIdList() {
+		return roleIdList;
+	}
+
+	public void setRoleIdList(List<Long> roleIdList) {
+		this.roleIdList = roleIdList;
 	}
 }

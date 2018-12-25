@@ -82,4 +82,19 @@ public class AdminServiceImpl extends ServiceImpl<AdminDao, AdminEntity> impleme
         }
         return null;
     }
+
+    @Override
+    public List<String> queryAllPerms(Long adminId) {
+        return baseMapper.queryAllPerms(adminId);
+    }
+
+    @Override
+    public List<Long> queryAllMenuId(Long adminId) {
+        return baseMapper.queryAllMenuId(adminId);
+    }
+
+    @Override
+    public boolean updatePassword(Long adminId, String password, String newPassword) {
+        return false;
+    }
 }

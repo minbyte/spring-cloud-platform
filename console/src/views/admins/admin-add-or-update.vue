@@ -146,9 +146,9 @@
           if (valid) {
             this.$http({
               url: `/admins/admin/${!this.dataForm.id ? 'save' : 'update'}`,
-              method: 'post',
+              method: !this.dataForm.id ? 'post' : 'put' ,
               data: {
-                'userId': this.dataForm.id || undefined,
+                'adminId': this.dataForm.id || undefined,
                 'username': this.dataForm.userName,
                 'password': this.dataForm.password,
                 'salt': this.dataForm.salt,

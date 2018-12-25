@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -19,5 +20,15 @@ import java.util.Set;
 public interface RoleMenuDao extends BaseMapper<RoleMenuEntity> {
 
     Set<MenuEntity> selectByRoleId(@Param("roleIds") Set<Long> roleIds);
+
+    /**
+     * 根据角色ID，获取菜单ID列表
+     */
+    List<Long> queryMenuIdList(Long roleId);
+
+    /**
+     * 根据角色ID数组，批量删除
+     */
+    int deleteBatch(Long[] roleIds);
 	
 }

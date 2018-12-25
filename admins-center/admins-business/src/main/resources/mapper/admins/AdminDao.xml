@@ -13,10 +13,26 @@
         <result property="email" column="email"/>
         <result property="avatar" column="avatar"/>
         <result property="name" column="name"/>
+        <result property="createAdminId" column="create_admin_id"/>
         <result property="enabled" column="enabled"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
     </resultMap>
+
+    <!-- 查询用户的所有菜单ID -->
+    <select id="queryAllMenuId" resultType="java.lang.Long">
+        select distinct rm.menu_id from tb_admin_role ur
+        LEFT JOIN tb_role_menu rm on ur.role_id = rm.role_id
+        where ur.user_id = #{userId}
+    </select>
+
+    <!-- 查询用户的所有权限 -->
+    <select id="queryAllPerms" resultType="java.lang.String">
+        select m.perms from tb_admin_role ur
+        LEFT JOIN tb_role_menu rm on ur.role_id = rm.role_id
+        LEFT JOIN tb_menu m on rm.menu_id = m.menu_id
+        where ur.user_id = #{userId}
+    </select>
 
 
 </mapper>
