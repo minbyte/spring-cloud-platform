@@ -40,7 +40,6 @@ public class DefaultUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		R<LoginPerson> res = adminFeign.loginInfo(username);
-		System.out.println(JSON.toJSONString(res));
 		if(res.isOk()){
 			return res.getData();
 		}else{

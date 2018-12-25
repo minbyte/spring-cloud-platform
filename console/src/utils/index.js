@@ -1,6 +1,8 @@
-/**
- * Created by jiachenpan on 16/11/18.
- */
+import store from '@/store'
+
+export function isAuth(key) {
+  return (store.getters.permissions || []).indexOf(key) !== -1 || false
+}
 
 export function parseTime(time, cFormat) {
   if (arguments.length === 0) {

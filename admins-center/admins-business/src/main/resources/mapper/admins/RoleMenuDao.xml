@@ -10,5 +10,15 @@
         <result property="menuId" column="menu_id"/>
     </resultMap>
 
+    <select id="selectByRoleId" resultType="com.mindasoft.cloud.admins.entity.MenuEntity">
+        select m.* from tb_menu m inner join tb_role_menu rm on m.menu_id = rm.menu_id
+        <where>
+            rm.role_id in
+            <foreach collection="roleIds" item="roleId" open="(" separator="," close=")">
+                #{roleId}
+            </foreach>
+        </where>
+    </select>
+
 
 </mapper>

@@ -1,8 +1,11 @@
 package com.mindasoft.cloud.admins.controller;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.mindasoft.cloud.commons.util.OAuth2Utils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -31,6 +34,23 @@ import com.mindasoft.cloud.commons.util.R;
 public class RoleController {
     @Autowired
     private RoleService roleService;
+
+    /**
+     * 角色列表
+     */
+    @GetMapping("/select")
+    @PreAuthorize("hasAuthority('admins:role:select')")
+    public R select(){
+        Map<String, Object> map = new HashMap<>();
+
+        //如果不是超级管理员，则只查询自己所拥有的角色列表
+        Long adminId = OAuth2Utils.getId();
+        if(1 != adminId){
+            map.put("createAdminId", adminId);
+        }
+        List<RoleEntity> list = roleService.selectByMap(map);
+        return R.ok().put(list);
+    }
 
     /**
      * 列表

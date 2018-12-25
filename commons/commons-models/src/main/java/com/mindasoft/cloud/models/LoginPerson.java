@@ -2,6 +2,8 @@ package com.mindasoft.cloud.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +20,7 @@ import java.util.Set;
  */
 @Data
 public class LoginPerson implements UserDetails {
+    private Long adminId;
     private String username;
     private String password;
     /**
@@ -39,20 +42,16 @@ public class LoginPerson implements UserDetails {
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> collection = new HashSet<>();
+        Set<GrantedAuthority> collection = new HashSet<>();
         if (!CollectionUtils.isEmpty(roles)) {
             roles.parallelStream().forEach(role -> {
-                if (role.startsWith("ROLE_")) {
-                    collection.add(new SimpleGrantedAuthority(role));
-                } else {
-                    collection.add(new SimpleGrantedAuthority("ROLE_" + role));
-                }
+                collection.add(new SimpleGrantedAuthority("ROLE_" + role));
             });
         }
 
         if (!CollectionUtils.isEmpty(permissions)) {
-            permissions.parallelStream().forEach(per -> {
-                collection.add(new SimpleGrantedAuthority(per));
+            permissions.parallelStream().forEach(perm -> {
+                collection.add(new SimpleGrantedAuthority(perm));
             });
         }
 

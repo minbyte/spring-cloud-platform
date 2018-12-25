@@ -35,13 +35,9 @@ public class AdminController {
     @GetMapping(value = "/login", params = "username")
     @ApiOperation(value = "登陆")
     public R<LoginPerson> login(String username){
-        AdminEntity adminEntity = adminService.getAdminByUsername(username);
-        if(null != adminEntity){
-            LoginPerson adminInfo = new LoginPerson();
-            BeanUtils.copyProperties(adminEntity,adminInfo);
-            adminInfo.setPermissions(new HashSet<String>(){{add("admins:admin:info");}});
-            adminInfo.setRoles(new ArrayList<String>(){{add("ROLE_admin");}});
-            return R.ok().put(adminInfo);
+        LoginPerson loginPerson = adminService.getLoginPerson(username);
+        if(null != loginPerson){
+            return R.ok().put(loginPerson);
         }
         return R.ok();
     }
@@ -116,7 +112,12 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admins:admin:delete')")
     @ApiOperation(value = "删除")
     public R delete(@RequestBody Long[] adminIds){
-        adminService.deleteBatchIds(Arrays.asList(adminIds));
+        List<Long> adminIdList = Arrays.asList(adminIds);
+        if(adminIdList.contains(Long.valueOf(1))){
+            return R.fail("管理员不能删除");
+        }
+
+        adminService.deleteBatchIds(adminIdList);
         return R.ok();
     }
 

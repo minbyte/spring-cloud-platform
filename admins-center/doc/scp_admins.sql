@@ -39,7 +39,7 @@ CREATE TABLE `tb_admin` (
 
 insert  into `tb_admin`(`admin_id`,`username`,`password`,`nickname`,`mobile`,`email`,`avatar`,`name`,`enabled`,`create_time`,`update_time`) values 
 
-(1,'admin','admin','管理员',NULL,NULL,'https://img.mgtv.com/imgotv-member/user/avt.jpg',NULL,'','2018-12-21 17:17:58','2018-12-24 16:17:34');
+(1,'admin','admin','管理员','17377878899','hmiter@sina.com','https://img.mgtv.com/imgotv-member/user/avt.jpg',NULL,'','2018-12-21 17:17:58','2018-12-24 16:17:34');
 
 /*Table structure for table `tb_admin_role` */
 
@@ -68,9 +68,43 @@ CREATE TABLE `tb_menu` (
   `icon` varchar(50) DEFAULT NULL COMMENT '菜单图标',
   `order_num` int(11) DEFAULT NULL COMMENT '排序',
   PRIMARY KEY (`menu_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='菜单管理';
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='菜单管理';
 
 /*Data for the table `tb_menu` */
+
+insert  into `tb_menu`(`menu_id`,`parent_id`,`name`,`url`,`perms`,`type`,`icon`,`order_num`) values 
+
+(1,0,'系统管理',NULL,NULL,0,'system',0),
+
+(2,1,'管理员列表','admins/admin',NULL,1,'admin',1),
+
+(3,1,'角色管理','admins/role',NULL,1,'role',2),
+
+(4,1,'菜单管理','admins/menu',NULL,1,'menu',3),
+
+(5,2,'查看',NULL,'admins:admin:view',2,NULL,0),
+
+(6,2,'新增',NULL,'admins:admin:save',2,NULL,0),
+
+(7,2,'修改',NULL,'admins:admin:update',2,NULL,0),
+
+(8,2,'删除',NULL,'admins:admin:delete',2,NULL,0),
+
+(9,3,'查看',NULL,'admins:role:view',2,NULL,0),
+
+(10,3,'新增',NULL,'admins:role:save',2,NULL,0),
+
+(11,3,'修改',NULL,'admins:role:update',2,NULL,0),
+
+(12,3,'删除',NULL,'admins:role:delete',2,NULL,0),
+
+(13,4,'查看',NULL,'admins:menu:view',2,NULL,0),
+
+(14,4,'新增',NULL,'admins:menu:save',2,NULL,0),
+
+(15,4,'修改',NULL,'admins:menu:update',2,NULL,0),
+
+(16,4,'删除',NULL,'admins:menu:delete',2,NULL,0);
 
 /*Table structure for table `tb_role` */
 

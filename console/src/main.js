@@ -14,11 +14,17 @@ import store from './store'
 
 import '@/icons' // icon
 import '@/permission' // permission control 权限控制
+import { isAuth } from '@/utils'
+import request from '@/utils/request'
 
 // 使用ElementUI组件，并传入locale国际化参数
 Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
+
+// 挂载全局
+Vue.prototype.isAuth = isAuth // 权限方法
+Vue.prototype.$http = request // ajax请求方法
 
 // 创建和挂载根实例。
 // 通过 router 配置参数注入路由，从而让整个应用都有路由功能

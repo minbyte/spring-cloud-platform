@@ -10,5 +10,21 @@
         <result property="roleId" column="role_id"/>
     </resultMap>
 
+    <resultMap type="com.mindasoft.cloud.admins.entity.RoleEntity" id="roleMap">
+        <result property="roleId" column="role_id"/>
+        <result property="roleName" column="role_name"/>
+        <result property="remark" column="remark"/>
+        <result property="createAdminId" column="create_admin_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <select id="selectByAdminId" resultMap="roleMap">
+        select r.* from tb_admin_role ru inner join tb_role r on r.role_id = ru.role_id where ru.admin_id = #{adminId}
+    </select>
+
+    <select id="selectByRoleId" resultMap="adminRoleMap">
+        SELECT * FROM tb_admin_role WHERE role_id = #{roleId}
+    </select>
 
 </mapper>

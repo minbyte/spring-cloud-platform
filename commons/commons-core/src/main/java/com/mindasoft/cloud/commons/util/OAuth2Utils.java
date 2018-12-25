@@ -79,6 +79,14 @@ public class OAuth2Utils {
     }
 
     /**
+     * 获取当前登录用户的ID
+     * @return
+     */
+    public static Long getId(){
+        return getLoginPerson().getAdminId();
+    }
+
+    /**
      *  获取当前登入用户的访问accessToken
      * @return
      */

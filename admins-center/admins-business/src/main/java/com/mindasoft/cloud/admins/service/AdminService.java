@@ -3,6 +3,7 @@ package com.mindasoft.cloud.admins.service;
 import com.baomidou.mybatisplus.service.IService;
 import com.mindasoft.cloud.commons.util.PageUtils;
 import com.mindasoft.cloud.admins.entity.AdminEntity;
+import com.mindasoft.cloud.models.LoginPerson;
 
 import java.util.Map;
 
@@ -17,6 +18,6 @@ public interface AdminService extends IService<AdminEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
-    AdminEntity getAdminByUsername(String username);
+    LoginPerson getLoginPerson(String username);
 }
 

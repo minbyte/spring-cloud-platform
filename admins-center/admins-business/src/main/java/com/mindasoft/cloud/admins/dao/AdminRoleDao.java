@@ -2,7 +2,11 @@ package com.mindasoft.cloud.admins.dao;
 
 import com.mindasoft.cloud.admins.entity.AdminRoleEntity;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.mindasoft.cloud.admins.entity.RoleEntity;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * 用户与角色对应关系
@@ -13,5 +17,8 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface AdminRoleDao extends BaseMapper<AdminRoleEntity> {
-	
+
+    Set<RoleEntity> selectByAdminId(Long adminId);
+
+    List<AdminRoleEntity> selectByRoleId(Long roleId);
 }
