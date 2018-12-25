@@ -148,7 +148,7 @@
             this.$http({
               url: `/admins/menu/info/${this.dataForm.id}`,
               method: 'get',
-              params: this.$http.adornParams()
+              params: {}
             }).then(response => {
               if (response && response.code === 0) {
                 this.dataForm.id = response.data.menuId
