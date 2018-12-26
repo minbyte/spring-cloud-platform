@@ -1,7 +1,6 @@
 import { login, logout, getInfo, loadMenu } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { isURL } from '@/utils/validate'
-import Layout from '@/views/layout/Layout'
 
 // 开发环境不使用懒加载, 因为懒加载页面太多的话会造成webpack热更新太慢, 所以只有生产环境使用懒加载
 const _import = require('@/router/import-' + process.env.NODE_ENV)
@@ -86,7 +85,6 @@ const user = {
         loadMenu().then(response => {
           if (response && response.code === 0) {
             const dynamicMenuRoutes = filterDynamicMenuRoutes(response.data)
-            console.info(JSON.stringify(dynamicMenuRoutes))
             commit('SET_DYNAMICROUTERS', dynamicMenuRoutes)
             resolve(response)
           } else {
@@ -105,6 +103,7 @@ const user = {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
           commit('SET_PERMISSIONS', [])
+          commit('SET_DYNAMICROUTERS', [])
           removeToken()
           resolve()
         }).catch(error => {
@@ -145,7 +144,7 @@ function filterDynamicMenuRoutes(menuList = []) {
     if (menuList[i].list && menuList[i].list.length >= 1) {
       temp = menuList[i].list
       route['children'] = filterDynamicMenuRoutes(temp)
-      route['component'] = Layout
+      route['component'] = _import('layout/Layout')
     } else if (!isURL(menuList[i].url)) {
       // url不以http[s]://开头
       route['component'] = _import(`${menuList[i].url}`)

@@ -43,6 +43,9 @@ export default {
     },
     logout() {
       this.$store.dispatch('LogOut').then(() => {
+        // location.assign("/login")
+        // alert(location.href)
+        location.assign("/")
         location.reload() // 为了重新实例化vue-router对象 避免bug
       })
     }
