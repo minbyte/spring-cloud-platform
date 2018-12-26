@@ -94,108 +94,108 @@
 </template>
 
 <script>
-  import AddOrUpdate from './admin-add-or-update'
-  export default {
-    data () {
-      return {
-        dataForm: {
-          userName: ''
-        },
-        dataList: [],
-        pageIndex: 1,
-        pageSize: 10,
-        totalPage: 0,
-        dataListLoading: false,
-        dataListSelections: [],
-        addOrUpdateVisible: false
-      }
+import AddOrUpdate from './admin-add-or-update'
+export default {
+  components: {
+    AddOrUpdate
+  },
+  data () {
+    return {
+      dataForm: {
+        userName: ''
+      },
+      dataList: [],
+      pageIndex: 1,
+      pageSize: 10,
+      totalPage: 0,
+      dataListLoading: false,
+      dataListSelections: [],
+      addOrUpdateVisible: false
+    }
+  },
+  created() {
+    this.getDataList()
+  },
+  methods: {
+    // 获取数据列表
+    getDataList () {
+      this.dataListLoading = true
+      this.$http({
+        url: '/admins/admin/list',
+        method: 'get',
+        params: {
+          'page': this.pageIndex,
+          'limit': this.pageSize,
+          'username': this.dataForm.userName
+        }
+      }).then(response => {
+        if (response && response.code === 0) {
+          this.dataList = response.data.list
+          this.totalPage = response.data.totalCount
+        } else {
+          this.dataList = []
+          this.totalPage = 0
+        }
+        this.dataListLoading = false
+      }).catch(error => {
+        this.$message({
+          message: error || '查询数据失败',
+          type: 'error'
+        })
+      })
     },
-    components: {
-      AddOrUpdate
-    },
-    created() {
+    // 每页数
+    sizeChangeHandle (val) {
+      this.pageSize = val
+      this.pageIndex = 1
       this.getDataList()
     },
-    methods: {
-      // 获取数据列表
-      getDataList () {
-        this.dataListLoading = true
+    // 当前页
+    currentChangeHandle (val) {
+      this.pageIndex = val
+      this.getDataList()
+    },
+    // 多选
+    selectionChangeHandle (val) {
+      this.dataListSelections = val
+    },
+    // 新增 / 修改
+    addOrUpdateHandle (id) {
+      this.addOrUpdateVisible = true
+      this.$nextTick(() => {
+        this.$refs.addOrUpdate.init(id)
+      })
+    },
+    // 删除
+    deleteHandle (id) {
+      var adminIds = id ? [id] : this.dataListSelections.map(item => {
+        return item.adminId
+      })
+      this.$confirm(`确定对[id=${adminIds.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
         this.$http({
-          url: '/admins/admin/list',
-          method: 'get',
-          params: {
-            'page': this.pageIndex,
-            'limit': this.pageSize,
-            'username': this.dataForm.userName
-          }
+          url: '/admins/admin/delete',
+          method: 'delete',
+          data: adminIds
         }).then(response => {
           if (response && response.code === 0) {
-            this.dataList = response.data.list
-            this.totalPage = response.data.totalCount
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.getDataList()
+              }
+            })
           } else {
-            this.dataList = []
-            this.totalPage = 0
+            this.$message.error(response.msg)
           }
-          this.dataListLoading = false
-        }).catch(error => {
-          this.$message({
-            message: error || '查询数据失败',
-            type: 'error'
-          })
         })
-      },
-      // 每页数
-      sizeChangeHandle (val) {
-        this.pageSize = val
-        this.pageIndex = 1
-        this.getDataList()
-      },
-      // 当前页
-      currentChangeHandle (val) {
-        this.pageIndex = val
-        this.getDataList()
-      },
-      // 多选
-      selectionChangeHandle (val) {
-        this.dataListSelections = val
-      },
-      // 新增 / 修改
-      addOrUpdateHandle (id) {
-        this.addOrUpdateVisible = true
-        this.$nextTick(() => {
-          this.$refs.addOrUpdate.init(id)
-        })
-      },
-      // 删除
-      deleteHandle (id) {
-        var adminIds = id ? [id] : this.dataListSelections.map(item => {
-          return item.adminId
-        })
-        this.$confirm(`确定对[id=${adminIds.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$http({
-            url: '/admins/admin/delete',
-            method: 'delete',
-            data: adminIds
-          }).then(response => {
-            if (response && response.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.getDataList()
-                }
-              })
-            } else {
-              this.$message.error(response.msg)
-            }
-          })
-        }).catch(() => {})
-      }
+      }).catch(() => {})
     }
   }
+}
 </script>

@@ -1,5 +1,10 @@
-import { login, logout, getInfo } from '@/api/login'
+import { login, logout, getInfo, loadMenu } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import { isURL } from '@/utils/validate'
+import Layout from '@/views/layout/Layout'
+
+// 开发环境不使用懒加载, 因为懒加载页面太多的话会造成webpack热更新太慢, 所以只有生产环境使用懒加载
+const _import = require('@/router/import-' + process.env.NODE_ENV)
 
 const user = {
   state: {
@@ -7,7 +12,8 @@ const user = {
     name: '',
     avatar: '',
     roles: [],
-    permissions: []
+    permissions: [],
+    dynamicRouters: []
   },
 
   mutations: {
@@ -25,6 +31,9 @@ const user = {
     },
     SET_PERMISSIONS: (state, permissions) => {
       state.permissions = permissions
+    },
+    SET_DYNAMICROUTERS: (state, dynamicRouters) => {
+      state.dynamicRouters = dynamicRouters
     }
   },
 
@@ -71,6 +80,24 @@ const user = {
       })
     },
 
+    // 加载菜单
+    LoadMenu({ commit, state }) {
+      return new Promise((resolve, reject) => {
+        loadMenu().then(response => {
+          if (response && response.code === 0) {
+            const dynamicMenuRoutes = filterDynamicMenuRoutes(response.data)
+            console.info(JSON.stringify(dynamicMenuRoutes))
+            commit('SET_DYNAMICROUTERS', dynamicMenuRoutes)
+            resolve(response)
+          } else {
+            reject('LoadMenu: LoadMenu error !')
+          }
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+
     // 登出
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
@@ -95,6 +122,37 @@ const user = {
       })
     }
   }
+}
+
+function filterDynamicMenuRoutes(menuList = []) {
+  var temp = []
+  var routes = []
+  for (var i = 0; i < menuList.length; i++) {
+    var route = {
+      path: '/' + menuList[i].url,
+      component: null,
+      name: menuList[i].name,
+      meta: {
+        menuId: menuList[i].menuId,
+        title: menuList[i].name,
+        isDynamic: true,
+        isTab: true,
+        iframeUrl: ''
+      },
+      children: []
+    }
+    // 如果有子菜单
+    if (menuList[i].list && menuList[i].list.length >= 1) {
+      temp = menuList[i].list
+      route['children'] = filterDynamicMenuRoutes(temp)
+      route['component'] = Layout
+    } else if (!isURL(menuList[i].url)) {
+      // url不以http[s]://开头
+      route['component'] = _import(`${menuList[i].url}`)
+    }
+    routes.push(route)
+  }
+  return routes
 }
 
 export default user

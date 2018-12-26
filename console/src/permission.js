@@ -15,9 +15,20 @@ const whiteList = ['/login'] // 不重定向白名单
  */
 router.beforeEach((to, from, next) => {
   NProgress.start()
-
+  alert(to.path)
   if (getToken()) {
     // 如果已经有token
+    if (store.getters.dynamicRouters.length < 1) {
+      // 如果加载动态路由，则重新加载
+      store.dispatch('LoadMenu').then(res => { // 拉取用户信息
+        router.addRoutes(store.getters.dynamicRouters)
+      }).catch((err) => {
+        store.dispatch('FedLogOut').then(() => {
+          Message.error(err || 'LoadMenu failed, please login again')
+          next({ path: '/' })
+        })
+      })
+    }
     if (to.path === '/login') {
       // 访问的是登录页，则定向到首页
       next({ path: '/' })

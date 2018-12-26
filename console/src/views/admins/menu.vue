@@ -63,16 +63,14 @@
         align="center"
         width="150"
         :show-overflow-tooltip="true"
-        label="菜单URL">
-      </el-table-column>
+        label="菜单URL"/>
       <el-table-column
         prop="perms"
         header-align="center"
         align="center"
         width="150"
         :show-overflow-tooltip="true"
-        label="授权标识">
-      </el-table-column>
+        label="授权标识" />
       <el-table-column
         fixed="right"
         header-align="center"
@@ -86,79 +84,79 @@
       </el-table-column>
     </el-table>
     <!-- 弹窗, 新增 / 修改 -->
-    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList" />
   </div>
 </template>
 
 <script>
-  import TableTreeColumn from '@/components/table-tree-column'
-  import AddOrUpdate from './menu-add-or-update'
-  import { treeDataTranslate } from '@/utils'
-  export default {
-    data () {
-      return {
-        dataForm: {},
-        dataList: [],
-        dataListLoading: false,
-        addOrUpdateVisible: false
-      }
+import TableTreeColumn from '@/components/table-tree-column'
+import AddOrUpdate from './menu-add-or-update'
+import { treeDataTranslate } from '@/utils'
+export default {
+  components: {
+    TableTreeColumn,
+    AddOrUpdate
+  },
+  data() {
+    return {
+      dataForm: {},
+      dataList: [],
+      dataListLoading: false,
+      addOrUpdateVisible: false
+    }
+  },
+  created() {
+    this.getDataList()
+  },
+  methods: {
+    // 获取数据列表
+    getDataList() {
+      this.dataListLoading = true
+      this.$http({
+        url: '/admins/menu/list',
+        method: 'get',
+        params: {}
+      }).then(response => {
+        if (response && response.code === 0) {
+          this.dataList = treeDataTranslate(response.data, 'menuId')
+        }
+        this.dataListLoading = false
+      })
     },
-    components: {
-      TableTreeColumn,
-      AddOrUpdate
+    // 新增 / 修改
+    addOrUpdateHandle(id) {
+      this.addOrUpdateVisible = true
+      this.$nextTick(() => {
+        this.$refs.addOrUpdate.init(id)
+      })
     },
-    created () {
-      this.getDataList()
-    },
-    methods: {
-      // 获取数据列表
-      getDataList () {
-        this.dataListLoading = true
+    // 删除
+    deleteHandle(id) {
+      this.$confirm(`确定对[id=${id}]进行[删除]操作?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
         this.$http({
-          url: '/admins/menu/list',
-          method: 'get',
-          params: {}
+          url: `/admins/menu/delete/${id}`,
+          method: 'post',
+          data: {}
         }).then(response => {
           if (response && response.code === 0) {
-            this.dataList = treeDataTranslate(response.data, 'menuId')
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.getDataList()
+              }
+            })
+          } else {
+            this.$message.error(response.data.msg)
           }
-          this.dataListLoading = false
         })
-      },
-      // 新增 / 修改
-      addOrUpdateHandle (id) {
-        this.addOrUpdateVisible = true
-        this.$nextTick(() => {
-          this.$refs.addOrUpdate.init(id)
-        })
-      },
-      // 删除
-      deleteHandle (id) {
-        this.$confirm(`确定对[id=${id}]进行[删除]操作?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$http({
-            url: `/admins/menu/delete/${id}`,
-            method: 'post',
-            data: {}
-          }).then(response => {
-            if (response && response.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.getDataList()
-                }
-              })
-            } else {
-              this.$message.error(data.msg)
-            }
-          })
-        }).catch(() => {})
-      }
+      }).catch(() => {})
     }
   }
+}
 </script>

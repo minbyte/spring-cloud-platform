@@ -3,9 +3,11 @@ package com.mindasoft.cloud.admins.controller;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.mindasoft.cloud.admins.constants.Constant;
 import com.mindasoft.cloud.commons.exception.BaseException;
+import com.mindasoft.cloud.commons.util.OAuth2Utils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -35,6 +37,15 @@ import com.mindasoft.cloud.commons.util.R;
 public class MenuController {
     @Autowired
     private MenuService menuService;
+
+    /**
+     * 导航菜单
+     */
+    @GetMapping("/nav")
+    public R nav(){
+        List<MenuEntity> menuList = menuService.getAdminMenuList(OAuth2Utils.getId());
+        return R.ok().put( menuList);
+    }
 
     /**
      * 选择菜单(添加、修改菜单)

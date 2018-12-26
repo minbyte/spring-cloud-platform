@@ -21,101 +21,27 @@ import Layout from '../views/layout/Layout'
     icon: 'svg-name'             the icon show in the sidebar,
   }
 **/
-export const constantRouterMap = [
+export const staticRouters = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
-
   {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
-    name: 'Dashboard',
+    name: '首页',
     hidden: true,
     children: [{
       path: 'dashboard',
       component: () => import('@/views/dashboard/index')
     }]
   },
-  {
-    path: '/admins',
-    component: Layout,
-    redirect: '/admins/admin',
-    name: '权限管理',
-    meta: { title: '权限管理', icon: 'example' },
-    children: [
-      {
-        path: 'admin',
-        name: '管理员管理',
-        component: () => import('@/views/admins/admin'),
-        meta: { title: '管理员管理', icon: 'table' }
-      },
-      {
-        path: 'role',
-        name: '角色管理',
-        component: () => import('@/views/admins/role'),
-        meta: { title: '角色管理', icon: 'tree' }
-      },
-      {
-        path: 'menu',
-        name: '菜单管理',
-        component: () => import('@/views/admins/menu'),
-        meta: { title: '菜单管理', icon: 'nested' }
-      }
-    ]
-  },
-
-  // 以下是demo
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
-  },
-
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
-      }
-    ]
-  },
-
   { path: '*', redirect: '/404', hidden: true }
 ]
 
-export default new Router({
+const router = new Router({
   // mode: 'history', //后端支持可开
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRouterMap
+  routes: staticRouters
 })
+
+export default router

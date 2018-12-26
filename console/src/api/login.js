@@ -31,3 +31,10 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function loadMenu() {
+  return request({
+    url: '/admins/menu/nav',
+    method: 'get'
+  })
+}
