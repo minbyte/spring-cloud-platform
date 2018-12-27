@@ -13,6 +13,46 @@ spring:
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      enabled: true
+  mvc:
+    throw-exception-if-no-handler-found: true
+    static-path-pattern: /static/**
+  resources:
+    add-mappings: false
+
+#mybatis
+mybatis-plus:
+  mapper-locations: classpath:mapper/**/*.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.mindasoft.cloud.*.entity
+  global-config:
+    #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+    id-type: 0
+    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+    field-strategy: 2
+    #驼峰下划线转换
+    db-column-underline: true
+    #刷新mapper 调试神器
+    refresh-mapper: true
+    #数据库大写下划线转换
+    #capital-mode: true
+    #序列接口实现类配置
+    #key-generator: com.baomidou.springboot.xxx
+    #逻辑删除配置
+    logic-delete-value: -1
+    logic-not-delete-value: 0
+    #自定义填充策略接口实现
+    #meta-object-handler: com.baomidou.springboot.xxx
+    #自定义SQL注入器
+    sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
 
 eureka:
   client:
@@ -36,9 +76,40 @@ eureka:
       group: example-service-group
       region: dev
 
-logging:
-  config: classpath:logback-spring.xml
-  level:
-    dao: debug
-    org:
-      mybatis: debug
+#springboot2.0 的actuator配置项为：
+management:
+  endpoint:
+    shutdown:
+          enabled: true # 开始POST shutdown
+  endpoints:
+    web:
+#      base-path: "/" #修改访问路径  2.0之前默认是/   2.0默认是 /actuator  可以通过这个属性值修改
+      exposure:
+        include: '*'  #开放所有页面节点  默认只开启了health、info两个节点
+info: # 应用信息 /actuator/info 显示信息
+  app:
+    name: "@project.artifactId@"
+    encoding: '@project.build.sourceEncoding@'
+    profiles: ${spring.profiles.active}
+    java:
+      source: '@java.version@'
+      target: '@java.version@'
+
+feign:
+  hystrix:
+    enabled: true
+
+ribbon:
+  ReadTimeout:  30000
+  ConnectTimeout:  15000
+  ServerListRefreshInterval: 2000  # ribbon缓存时间
+
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true #是否开启超时熔断, 如果为false, 则熔断机制只在服务不可用时开启
+        isolation:
+          thread:
+            timeoutInMilliseconds : 1000  #设置超时熔断时间，默认1000(1s)

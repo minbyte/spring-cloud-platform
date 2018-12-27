@@ -7,8 +7,8 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('${moduleName}:${pathName}:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('${moduleName}:${pathName}:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('security:clientdetails:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('security:clientdetails:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     </div>
@@ -25,14 +25,86 @@
         align="center"
         width="50">
       </el-table-column>
-#foreach($column in $columns)
       <el-table-column
-        prop="${column.attrname}"
+        prop="id"
         header-align="center"
         align="center"
-        label="${column.comments}">
+        width="50"
+        label="主键">
       </el-table-column>
-#end
+      <el-table-column
+        prop="clientId"
+        header-align="center"
+        align="center"
+        label="应用标识">
+      </el-table-column>
+      <el-table-column
+        prop="resourceIds"
+        header-align="center"
+        align="center"
+        label="资源限定串(逗号分割)">
+      </el-table-column>
+      <el-table-column
+        prop="clientSecret"
+        header-align="center"
+        align="center"
+        width="200"
+        label="应用密钥(bcyt)加密">
+      </el-table-column>
+      <el-table-column
+        prop="clientSecretStr"
+        header-align="center"
+        align="center"
+        label="应用密钥(明文)">
+      </el-table-column>
+      <el-table-column
+        prop="scope"
+        header-align="center"
+        align="center"
+        label="范围">
+      </el-table-column>
+      <el-table-column
+        prop="authorizedGrantTypes"
+        header-align="center"
+        align="center"
+        label="授权方式">
+      </el-table-column>
+      <el-table-column
+        prop="webServerRedirectUri"
+        header-align="center"
+        align="center"
+        label="回调地址 ">
+      </el-table-column>
+      <el-table-column
+        prop="authorities"
+        header-align="center"
+        align="center"
+        label="权限">
+      </el-table-column>
+      <el-table-column
+        prop="accessTokenValidity"
+        header-align="center"
+        align="center"
+        label="access_token有效期">
+      </el-table-column>
+      <el-table-column
+        prop="refreshTokenValidity"
+        header-align="center"
+        align="center"
+        label="refresh_token有效期">
+      </el-table-column>
+      <el-table-column
+        prop="additionalInformation"
+        header-align="center"
+        align="center"
+        label="{}">
+      </el-table-column>
+      <el-table-column
+        prop="autoapprove"
+        header-align="center"
+        align="center"
+        label="是否自动授权 是-true">
+      </el-table-column>
       <el-table-column
         fixed="right"
         header-align="center"
@@ -40,8 +112,8 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.${pk.attrname})">修改</el-button>
-          <el-button type="text" size="small" @click="deleteHandle(scope.row.${pk.attrname})">删除</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
+          <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -60,7 +132,7 @@
 </template>
 
 <script>
-import AddOrUpdate from './${pathName}-add-or-update'
+import AddOrUpdate from './clientdetails-add-or-update'
 export default {
   components: {
       AddOrUpdate
@@ -79,15 +151,15 @@ export default {
       addOrUpdateVisible: false
     }
   },
-  created (){
+  created () {
     this.getDataList()
   },
   methods: {
     // 获取数据列表
     getDataList () {
       this.dataListLoading = true
-      #[[this.$http({]]#
-        url: '/${moduleName}/${pathName}/list',
+      this.$http({
+        url: '/security/clientdetails/list',
         method: 'get',
         params: {
           'page': this.pageIndex,
@@ -123,27 +195,27 @@ export default {
     // 新增 / 修改
     addOrUpdateHandle (id) {
       this.addOrUpdateVisible = true
-      #[[this.$nextTick(() => {]]#
+      this.$nextTick(() => {
         this.$refs.addOrUpdate.init(id)
       })
     },
     // 删除
     deleteHandle (id) {
       var ids = id ? [id] : this.dataListSelections.map(item => {
-        return item.${pk.attrname}
+        return item.id
       })
-      #[[this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {]]#
+      this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        #[[this.$http({]]#
-          url: '/${moduleName}/${pathName}/delete',
+        this.$http({
+          url: '/security/clientdetails/delete',
           method: 'delete',
           data: ids
         }).then(response => {
           if (response && response.code === 0) {
-            #[[this.$message({]]#
+            this.$message({
               message: '操作成功',
               type: 'success',
               duration: 1500,
@@ -152,7 +224,7 @@ export default {
               }
             })
           } else {
-            #[[this.$message.error(response.msg)]]#
+            this.$message.error(response.msg)
           }
         })
       })

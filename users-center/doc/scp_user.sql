@@ -1,6 +1,6 @@
 /*
 SQLyog  v12.2.6 (64 bit)
-MySQL - 5.6.39 : Database - scp_user
+MySQL - 5.6.39 : Database - scp_users
 *********************************************************************
 */
 
@@ -13,7 +13,7 @@ MySQL - 5.6.39 : Database - scp_user
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-USE `scp_user`;
+USE `scp_users`;
 
 DROP TABLE IF EXISTS `tb_token`;
 

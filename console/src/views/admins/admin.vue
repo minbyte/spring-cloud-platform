@@ -113,7 +113,7 @@ export default {
       addOrUpdateVisible: false
     }
   },
-  created() {
+  created () {
     this.getDataList()
   },
   methods: {

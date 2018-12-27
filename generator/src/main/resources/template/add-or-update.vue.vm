@@ -54,7 +54,7 @@
           this.$refs['dataForm'].resetFields()
           if (this.dataForm.${pk.attrname}) {
             this.$http({
-              url: #(`/${moduleName}/${pathName}/info/#[[$]]#{this.dataForm.${pk.attrname}}`),
+              url: `/${moduleName}/${pathName}/info/#[[$]]#{this.dataForm.${pk.attrname}}`,
               method: 'get',
               params: {}
             }).then(response => {
@@ -74,7 +74,7 @@
         #[[this.$refs['dataForm'].validate((valid) => {]]#
           if (valid) {
             this.$http({
-              url: #(`/${moduleName}/${pathName}/${!this.dataForm.${pk.attrname} ? 'save' : 'update'}`),
+              url: `/${moduleName}/${pathName}/${!this.dataForm.${pk.attrname} ? 'save' : 'update'}`,
               method: `${!this.dataForm.${pk.attrname} ? 'post' : 'put'}`,
               data: {
 #foreach($column in $columns)
