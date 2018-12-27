@@ -35,11 +35,11 @@ export const staticRouters = [
       component: () => import('@/views/dashboard/index')
     }]
   },
-  { path: '*', redirect: '/404', hidden: true }
+  { path: '*', redirect: '/', hidden: true }
 ]
 
 const router = new Router({
-  // mode: 'history', //后端支持可开
+  mode: 'hash', // 后端支持可开
   scrollBehavior: () => ({ y: 0 }),
   routes: staticRouters
 })

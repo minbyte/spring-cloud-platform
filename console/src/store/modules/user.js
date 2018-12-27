@@ -67,11 +67,7 @@ const user = {
           } else {
             reject('getInfo: roles must be a non-null array !')
           }
-          if (data.permissions && data.permissions.length > 0) { // 验证返回的permissions是否是一个非空数组
-            commit('SET_PERMISSIONS', data.permissions)
-          } else {
-            reject('getInfo: permissions must be a non-null array !')
-          }
+          commit('SET_PERMISSIONS', data.permissions)
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -134,23 +130,31 @@ function filterDynamicMenuRoutes(menuList = []) {
       meta: {
         menuId: menuList[i].menuId,
         title: menuList[i].name,
+        icon: menuList[i].icon,
         isDynamic: true,
         isTab: true,
         iframeUrl: ''
       },
       children: []
     }
-    // 如果有子菜单
+    // 如果有子菜单，必然是父节点
     if (menuList[i].list && menuList[i].list.length >= 1) {
       temp = menuList[i].list
       route['children'] = filterDynamicMenuRoutes(temp)
       route['component'] = _import('layout/Layout')
-    } else if (!isURL(menuList[i].url)) {
-      // url不以http[s]://开头
+      route['redirect'] = '/' + temp[0].url
+    } else if (menuList[i].url && !isURL(menuList[i].url)) {
+      // url不为空并且url不以http[s]://开头
       route['component'] = _import(`${menuList[i].url}`)
+    } else if (!menuList[i].url) {
+      // url为空的
+      route['path'] = `/i-${menuList[i].menuId}`
+      route['component'] = _import('404')
     }
+    // 其他的是以http开头的
     routes.push(route)
   }
+  console.info(JSON.stringify(routes))
   return routes
 }
 
