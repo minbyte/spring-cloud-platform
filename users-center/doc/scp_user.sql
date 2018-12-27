@@ -2,8 +2,7 @@
 SQLyog  v12.2.6 (64 bit)
 MySQL - 5.6.39 : Database - scp_users
 *********************************************************************
-*/
-
+*/
 
 /*!40101 SET NAMES utf8 */;
 
@@ -15,24 +14,12 @@ MySQL - 5.6.39 : Database - scp_users
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 USE `scp_users`;
 
-DROP TABLE IF EXISTS `tb_token`;
-
-CREATE TABLE `tb_token` (
-  `token` varchar(128) NOT NULL,
-  `user_id` bigint(64) NOT NULL,
-  `expire_time` datetime DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`token`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-/*Data for the table `tb_token` */
-
 /*Table structure for table `tb_user` */
 
 DROP TABLE IF EXISTS `tb_user`;
 
 CREATE TABLE `tb_user` (
-  `user_id` int(32) NOT NULL COMMENT '用户ID',
+  `user_id` int(32) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
   `username` varchar(50) DEFAULT NULL COMMENT '用户账号',
   `mobile` varchar(20) DEFAULT NULL COMMENT '手机号',
   `email` varchar(64) DEFAULT NULL COMMENT '电子邮箱',
@@ -51,9 +38,12 @@ CREATE TABLE `tb_user` (
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `uni_username` (`username`),
   UNIQUE KEY `uni_mobile` (`mobile`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
 
 /*Data for the table `tb_user` */
+
+insert  into `tb_user`(`user_id`,`username`,`mobile`,`email`,`password`,`nickname`,`avatar`,`name`,`idcard`,`sex`,`province`,`city`,`county`,`address`,`create_time`,`update_time`) values 
+(1,'user','123321','hm@user.com','user','张三','1',NULL,'88888',0,NULL,NULL,NULL,NULL,'2018-12-27 15:13:27','2018-12-27 15:14:13');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

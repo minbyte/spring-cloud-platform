@@ -124,7 +124,7 @@ function filterDynamicMenuRoutes(menuList = []) {
   var routes = []
   for (var i = 0; i < menuList.length; i++) {
     var route = {
-      path: '/' + menuList[i].url,
+      path: '/' + (menuList[i].url ? menuList[i].url : menuList[i].menuId),
       component: null,
       name: menuList[i].name,
       meta: {
@@ -154,7 +154,7 @@ function filterDynamicMenuRoutes(menuList = []) {
     // 其他的是以http开头的
     routes.push(route)
   }
-  console.info(JSON.stringify(routes))
+  // console.info(JSON.stringify(routes))
   return routes
 }
 

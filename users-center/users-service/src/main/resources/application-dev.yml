@@ -16,7 +16,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.jdbc.Driver
     druid:
-      url: jdbc:mysql://localhost:3306/cloud_user?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+      url: jdbc:mysql://localhost:3306/scp_users?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
       username: root
       password:
       initial-size: 1

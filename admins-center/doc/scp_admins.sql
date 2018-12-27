@@ -73,7 +73,7 @@ CREATE TABLE `tb_menu` (
 
 /*Data for the table `tb_menu` */
 
-insert  into `tb_menu`(`menu_id`,`parent_id`,`name`,`url`,`perms`,`type`,`icon`,`order_num`) values 
+insert  into `tb_menu`(`menu_id`,`parent_id`,`name`,`url`,`perms`,`type`,`icon`,`order_num`) values
 (1,0,'系统管理',NULL,NULL,0,'system',0),
 (2,1,'管理员管理','admins/admin',NULL,1,'admin',1),
 (3,1,'角色管理','admins/role',NULL,1,'role',2),
@@ -94,7 +94,13 @@ insert  into `tb_menu`(`menu_id`,`parent_id`,`name`,`url`,`perms`,`type`,`icon`,
 (18,17,'查看',NULL,'security:clientdetails:view',2,NULL,6),
 (19,17,'新增',NULL,'security:clientdetails:save',2,NULL,6),
 (20,17,'修改',NULL,'security:clientdetails:update',2,NULL,6),
-(21,17,'删除',NULL,'security:clientdetails:delete',2,NULL,6);
+(21,17,'删除',NULL,'security:clientdetails:delete',2,NULL,6),
+(22,0,'用户管理',NULL,NULL,0,'users',1),
+(23,22,'用户列表','users/user',NULL,1,'user',6),
+(24,23,'查看',NULL,'users:user:view',2,NULL,6),
+(25,23,'新增',NULL,'users:user:save',2,NULL,6),
+(26,23,'修改',NULL,'users:user:update',2,NULL,6),
+(27,23,'删除',NULL,'users:user:delete',2,NULL,6);
 
 /*Table structure for table `tb_role` */
 
