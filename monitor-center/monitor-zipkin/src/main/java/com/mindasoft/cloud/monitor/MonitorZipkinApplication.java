@@ -15,10 +15,10 @@ import zipkin.server.internal.EnableZipkinServer;
 @EnableDiscoveryClient
 @SpringBootApplication
 @EnableZipkinServer
-public class ZipkinApplication {
+public class MonitorZipkinApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ZipkinApplication.class, args);
+        SpringApplication.run(MonitorZipkinApplication.class, args);
     }
 }
 

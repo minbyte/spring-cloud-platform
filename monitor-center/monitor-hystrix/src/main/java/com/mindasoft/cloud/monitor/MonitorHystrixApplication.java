@@ -15,10 +15,10 @@ import org.springframework.cloud.netflix.turbine.EnableTurbine;
 @EnableTurbine   //开启Hystrix,提供把多个hystrix.stream的内容聚合为一个数据源供Dashboard展示
 @EnableHystrixDashboard // 开启HystrixDashboard展示
 @SpringCloudApplication
-public class HystrixApplication {
+public class MonitorHystrixApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(HystrixApplication.class, args);
+        SpringApplication.run(MonitorHystrixApplication.class, args);
     }
 
 }
