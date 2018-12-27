@@ -1,0 +1,32 @@
+server:  
+  port: 9010
+
+spring:  
+  application:  
+    name: monitor-admin
+  profiles:
+    active: dev  # 环境 dev|test|prod
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${spring.application.instance_id:${server.port}}
+    lease-renewal-interval-in-seconds: 5    # 续eureka客户需要多长时间发送心跳给eureka服务器，表明它仍然活着,默认为30 秒
+    lease-expiration-duration-in-seconds: 10 # Eureka服务器在接收到实例的最后一次发出的心跳后，需要等待多久才可以将此实例删除，默认为90秒 EurekaServer一定要设置eureka.server.eviction-interval-timer-in-ms否则这个配置无效
+    #需要增加下面配置，告诉注册中心访问路径变化
+    status-page-url-path: /actuator/info
+    health-check-url-path: /actuator/health
+    home-page-url-path: /
+  client:
+    registryFetchIntervalSeconds: 5
+    serviceUrl:
+      defaultZone: http://127.0.0.1:7000/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS

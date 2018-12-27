@@ -1,0 +1,21 @@
+server:  
+  port: 9012
+
+spring:  
+  application:  
+    name: monitor-zipkin
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
+  client:
+    registryFetchIntervalSeconds: 5
+    serviceUrl:
+      defaultZone: http://127.0.0.1:7000/eureka
+
+management:
+  metrics:
+    web:
+      server:
+        auto-time-requests: false
