@@ -61,12 +61,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
+     * 监控中心和swagger需要访问的url
+     */
+    private static final String[] ENDPOINTS = {"/actuator/health", "/actuator/env", "/actuator/metrics/**", "/actuator/trace", "/actuator/dump",
+            "/actuator/jolokia", "/actuator/info", "/actuator/logfile", "/actuator/refresh", "/actuator/flyway", "/actuator/liquibase",
+            "/actuator/heapdump", "/actuator/loggers", "/actuator/auditevents", "/actuator/env/PID", "/actuator/jolokia/**",
+            "/actuator/archaius/**", "/actuator/beans/**",  "/actuator/httptrace",
+            "/v2/api-docs/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**" ,
+            "/configuration/ui","/configuration/security","/doc.html",
+            "/druid/**","/login.html"};
+
+    /**
      * 设置无需验证请求路径
      */
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security",
-                "/swagger-ui.html", "/webjars/**", "/doc.html", "/login.html");
+        web.ignoring().antMatchers(ENDPOINTS);
         web.ignoring().antMatchers("/js/**");
         web.ignoring().antMatchers("/css/**");
         web.ignoring().antMatchers("/health");

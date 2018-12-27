@@ -23,6 +23,17 @@ public class ResourceServerConfig  extends ResourceServerConfigurerAdapter {
     @Autowired
     private CustomAccessDeniedHandler customAccessDeniedHandler;
 
+    /**
+     * 监控中心和swagger需要访问的url
+     */
+    private static final String[] ENDPOINTS = {"/actuator/health", "/actuator/env", "/actuator/metrics/**", "/actuator/trace", "/actuator/dump",
+            "/actuator/jolokia", "/actuator/info", "/actuator/logfile", "/actuator/refresh", "/actuator/flyway", "/actuator/liquibase",
+            "/actuator/heapdump", "/actuator/loggers", "/actuator/auditevents", "/actuator/env/PID", "/actuator/jolokia/**",
+            "/actuator/archaius/**", "/actuator/beans/**",  "/actuator/httptrace",
+            "/v2/api-docs/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**" ,
+            "/configuration/ui","/configuration/security","/doc.html",
+            "/druid/**","/login.html"};
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -30,8 +41,7 @@ public class ResourceServerConfig  extends ResourceServerConfigurerAdapter {
             .authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED)) //认证异常流程
             .and()
             .authorizeRequests() // 匹配需要资源认证路径
-            .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security",
-                    "/swagger-ui.html", "/webjars/**", "/doc.html","/admin/login")
+            .antMatchers(ENDPOINTS)
             .permitAll()            // 匹配不需要资源认证路径
             .anyRequest().authenticated()
             .and()
