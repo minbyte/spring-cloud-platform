@@ -12,15 +12,15 @@
         <result property="perms" column="perms"/>
         <result property="type" column="type"/>
         <result property="icon" column="icon"/>
-        <result property="orderNum" column="order_num"/>
+        <result property="sort" column="sort"/>
     </resultMap>
 
     <select id="queryListParentId" resultType="com.mindasoft.cloud.admins.entity.MenuEntity">
-        select * from tb_menu where parent_id = #{parentId} order by order_num asc
+        select * from tb_menu where parent_id = #{parentId} order by sort asc
     </select>
 
     <select id="queryNotButtonList" resultType="com.mindasoft.cloud.admins.entity.MenuEntity">
-        select * from tb_menu where type != 2 order by order_num asc
+        select * from tb_menu where type != 2 order by sort asc
     </select>
 
 </mapper>

@@ -52,7 +52,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="orderNum"
+        prop="sort"
         header-align="center"
         align="center"
         label="排序号">

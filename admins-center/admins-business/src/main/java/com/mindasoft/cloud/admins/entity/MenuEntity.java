@@ -58,7 +58,7 @@ public class MenuEntity implements Serializable {
 	/**
 	 * 排序
 	 */
-	private Integer orderNum;
+	private Integer sort;
 
 	/**
 	 * ztree属性
@@ -156,14 +156,14 @@ public class MenuEntity implements Serializable {
 	/**
 	 * 设置：排序
 	 */
-	public void setOrderNum(Integer orderNum) {
-		this.orderNum = orderNum;
+	public void setSort(Integer sort) {
+		this.sort = sort;
 	}
 	/**
 	 * 获取：排序
 	 */
-	public Integer getOrderNum() {
-		return orderNum;
+	public Integer getSort() {
+		return sort;
 	}
 
 	public String getParentName() {

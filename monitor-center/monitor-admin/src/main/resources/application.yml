@@ -1,5 +1,5 @@
 server:  
-  port: 9010
+  port: 7040
 
 spring:  
   application:  
@@ -30,3 +30,11 @@ management:
   endpoint:
     health:
       show-details: ALWAYS
+
+# 没有监控到以下
+#  OPTIONS /actuator/jolokia
+#  OPTIONS /actuator/logfile
+#  OPTIONS /actuator/flyway
+#  OPTIONS /actuator/trace
+#  OPTIONS /actuator/liquibase
+#  OPTIONS /actuator/dump

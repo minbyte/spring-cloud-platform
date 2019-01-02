@@ -4,6 +4,7 @@ import com.mindasoft.cloud.commons.oauth2.AuthExceptionEntryPoint;
 import com.mindasoft.cloud.commons.oauth2.CustomAccessDeniedHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -43,6 +44,7 @@ public class ResourceServerConfig  extends ResourceServerConfigurerAdapter {
             .and()
             .authorizeRequests() // 匹配需要资源认证路径
             .antMatchers(ENDPOINTS).permitAll()// 匹配不需要资源认证路径
+            .antMatchers(HttpMethod.OPTIONS).permitAll()
             .anyRequest().authenticated()
             .and()
             .httpBasic();

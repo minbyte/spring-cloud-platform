@@ -36,8 +36,8 @@
       <el-form-item v-if="dataForm.type !== 0" label="授权标识" prop="perms">
         <el-input v-model="dataForm.perms" placeholder="多个用逗号分隔, 如: user:list,user:create"></el-input>
       </el-form-item>
-      <el-form-item v-if="dataForm.type !== 2" label="排序号" prop="orderNum">
-        <el-input-number v-model="dataForm.orderNum" controls-position="right" :min="0" label="排序号"></el-input-number>
+      <el-form-item v-if="dataForm.type !== 2" label="排序号" prop="sort">
+        <el-input-number v-model="dataForm.sort" controls-position="right" :min="0" label="排序号"></el-input-number>
       </el-form-item>
       <el-form-item v-if="dataForm.type !== 2" label="菜单图标" prop="icon">
         <el-row>
@@ -53,7 +53,7 @@
                   :key="index"
                   @click="iconActiveHandle(item)"
                   :class="{ 'is-active': item === dataForm.icon }">
-                  <icon-svg :name="item"></icon-svg>
+                  <svg-icon :icon-class="item"/>
                 </el-button>
               </div>
             </el-popover>
@@ -98,7 +98,7 @@
           parentName: '',
           url: '',
           perms: '',
-          orderNum: 0,
+          sort: 0,
           icon: '',
           iconList: []
         },
@@ -157,7 +157,7 @@
                 this.dataForm.parentId = response.data.parentId
                 this.dataForm.url = response.data.url
                 this.dataForm.perms = response.data.perms
-                this.dataForm.orderNum = response.data.orderNum
+                this.dataForm.sort = response.data.sort
                 this.dataForm.icon = response.data.icon
                 this.menuListTreeSetCurrentNode()
               }
@@ -193,7 +193,7 @@
                 'parentId': this.dataForm.parentId,
                 'url': this.dataForm.url,
                 'perms': this.dataForm.perms,
-                'orderNum': this.dataForm.orderNum,
+                'sort': this.dataForm.sort,
                 'icon': this.dataForm.icon
               }
             }).then(response => {

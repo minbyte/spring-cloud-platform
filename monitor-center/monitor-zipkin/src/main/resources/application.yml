@@ -3,7 +3,7 @@ server:
 
 spring:  
   application:  
-    name: monitor-zipkin
+    name: monitor-7041
 
 eureka:
   instance:
