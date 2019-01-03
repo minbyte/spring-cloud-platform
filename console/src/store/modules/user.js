@@ -125,15 +125,14 @@ function filterDynamicMenuRoutes(menuList = []) {
   for (var i = 0; i < menuList.length; i++) {
     var route = {
       path: '/' + (menuList[i].url ? menuList[i].url : menuList[i].menuId),
-      component: null,
+      component: _import('layout/Layout'),
       name: menuList[i].name,
       meta: {
         menuId: menuList[i].menuId,
         title: menuList[i].name,
         icon: menuList[i].icon,
         isDynamic: true,
-        isTab: true,
-        iframeUrl: ''
+        isTab: true
       },
       children: []
     }
@@ -141,7 +140,6 @@ function filterDynamicMenuRoutes(menuList = []) {
     if (menuList[i].list && menuList[i].list.length >= 1) {
       temp = menuList[i].list
       route['children'] = filterDynamicMenuRoutes(temp)
-      route['component'] = _import('layout/Layout')
       route['redirect'] = '/' + temp[0].url
     } else if (menuList[i].url && !isURL(menuList[i].url)) {
       // url不为空并且url不以http[s]://开头
@@ -150,6 +148,11 @@ function filterDynamicMenuRoutes(menuList = []) {
       // url为空的
       route['path'] = `/i-${menuList[i].menuId}`
       route['component'] = _import('404')
+    } else if (isURL(menuList[i].url)) {
+      // url以http[s]://开头
+      route['path'] = `/i-${menuList[i].menuId}`
+      route['component'] = _import('frame')
+      route['props'] = { iframeUrl: (isURL(menuList[i].url) ? menuList[i].url : '') }
     }
     // 其他的是以http开头的
     routes.push(route)
