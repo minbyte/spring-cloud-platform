@@ -1,12 +1,13 @@
-端口  服务    启动顺序      说明
-7000 eureka    1        注册中心
-7010 gateway   2        网关
-7020 security  3        权限控制
-7030 apollo    -        配置中心 7031,7032
-7040 monitor   -        监控
+端口  服务    启动顺序  必须   说明
+7000 eureka    1      *      注册中心
+7010 gateway   2      *      网关
+7020 security  3      *      权限控制
+7030 apollo    -             配置中心 7031,7032
+7040 monitor   -             监控
 
-7120 infra     4        基础服务
-7100 admin     4        管理员
-7130 user      4        用户
-7140 payment   5        支付
-7150 sta       6        报表
+7100 logger    -             日志
+7110 infra     -             基础服务
+7120 admin     4      *      管理员
+7130 user      5             用户
+7140 payment   6             支付
+7150 report    7             报表
