@@ -130,7 +130,7 @@ public class MenuController {
     @PreAuthorize("hasAuthority('admins:menu:delete')")
     @ApiOperation(value = "删除")
     public R delete(@PathVariable("menuId") long menuId){
-        if(menuId <= 31){
+        if(menuId < 100){
             return R.fail("系统菜单，不能删除");
         }
 
