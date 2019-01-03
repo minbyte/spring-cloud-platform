@@ -55,6 +55,42 @@ CREATE TABLE `tb_admin_role` (
 
 /*Data for the table `tb_admin_role` */
 
+/*Table structure for table `tb_config` */
+
+DROP TABLE IF EXISTS `tb_config`;
+
+CREATE TABLE `tb_config` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `key` varchar(50) DEFAULT NULL COMMENT 'key',
+  `value` varchar(2000) DEFAULT NULL COMMENT 'value',
+  `status` tinyint(4) DEFAULT '1' COMMENT '状态   0：隐藏   1：显示',
+  `remarks` varchar(500) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `key` (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统配置信息表';
+
+/*Table structure for table `tb_dict` */
+
+DROP TABLE IF EXISTS `tb_dict`;
+
+CREATE TABLE `tb_dict` (
+  `id` int(64) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `value` varchar(100) NOT NULL COMMENT '数据值',
+  `label` varchar(100) NOT NULL COMMENT '标签名',
+  `type` varchar(100) NOT NULL COMMENT '类型',
+  `description` varchar(100) NOT NULL COMMENT '描述',
+  `sort` decimal(10,0) NOT NULL COMMENT '排序（升序）',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `remarks` varchar(255) DEFAULT NULL COMMENT '备注信息',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态，1正常 0禁用',
+  PRIMARY KEY (`id`),
+  KEY `sys_dict_value` (`value`),
+  KEY `sys_dict_label` (`label`),
+  KEY `sys_dict_del_flag` (`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='字典表';
+
+
 /*Table structure for table `tb_menu` */
 
 DROP TABLE IF EXISTS `tb_menu`;
