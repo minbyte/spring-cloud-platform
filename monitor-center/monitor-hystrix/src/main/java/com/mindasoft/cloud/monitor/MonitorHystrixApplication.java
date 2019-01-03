@@ -6,7 +6,8 @@ import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboar
 import org.springframework.cloud.netflix.turbine.EnableTurbine;
 
 /**
- * 在
+ * 项目在生产环境中，每个服务的访问量都不通，有些服务的访问量比较大，有时候有些服务挂了，不能继续服务，需要重启的时候，我们并不知道，
+ * 所以这时候就需要使用hystrix-turbine-dashboard做一个监控，监控所有的微服务，可以看到这个接口实时访问量，和健康状况。
  * @author: huangmin
  * @email: huangmin@mgtv.com
  * @date: 2018/8/13 15:56

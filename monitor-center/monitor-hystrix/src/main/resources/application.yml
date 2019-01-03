@@ -1,5 +1,5 @@
 server:  
-  port: 7042
+  port: 7041
 
 spring:  
   application:  
@@ -25,5 +25,5 @@ eureka:
 turbine:
   aggregator:
     clusterConfig: default  # 指定聚合哪些集群，多个使用","分割，默认为default。可使用http://.../turbine.stream?cluster={clusterConfig之一}访问
-  appConfig: console,user-service,payment-service,STA-SERVICE,INFRA-SERVICE,ACTIVITY-SERVICE   #要检测的注册在eureka上的服务名,多个使用","分割
+  appConfig: admins-service,security-service,users-service,payment-service   #要检测的注册在eureka上的服务名,多个使用","分割
   clusterNameExpression: "'default'"

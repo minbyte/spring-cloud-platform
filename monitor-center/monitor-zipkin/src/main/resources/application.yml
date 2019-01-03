@@ -1,9 +1,9 @@
 server:  
-  port: 9012
+  port: 7042
 
 spring:  
   application:  
-    name: monitor-7041
+    name: monitor-zipkin
 
 eureka:
   instance:

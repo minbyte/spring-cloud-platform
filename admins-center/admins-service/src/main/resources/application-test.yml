@@ -45,7 +45,7 @@ spring:
               config:
                   multi-statement-allow: true
   zipkin:
-    base-url: http://127.0.0.1:7022
+    base-url: http://127.0.0.1:7042
   sleuth:
     sampler:
       percentage: 1.0

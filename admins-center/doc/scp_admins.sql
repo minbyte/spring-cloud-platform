@@ -107,8 +107,11 @@ insert  into `tb_menu`(`menu_id`,`parent_id`,`name`,`url`,`perms`,`type`,`icon`,
 (32,29,'修改',NULL,'security:clientdetails:update',2,NULL,3),
 (33,29,'删除',NULL,'security:clientdetails:delete',2,NULL,4),
 (50,0,'系统监控',NULL,NULL,0,'monitor',2),
-(51,50,'服务监控',NULL,'https://baidu.com',1,NULL,1),
-(52,50,'zipkin监控',NULL,'https://baidu.com',1,NULL,2);
+(51,50,'注册中心','http://localhost:7000/',NULL,1,NULL,1),
+(52,50,'服务监控','http://localhost:7040/#/wallboard',NULL,1,NULL,2),
+(53,50,'hystrix监控','http://localhost:7041/hystrix',NULL,1,NULL,3),
+(54,50,'zipkin监控','http://localhost:7042/zipkin/',NULL,1,NULL,4),
+(55,50,'接口文档','http://localhost:7010/swagger-ui.html',NULL,1,NULL,5);
 
 /*Table structure for table `tb_role` */
 
