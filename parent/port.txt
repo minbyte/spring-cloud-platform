@@ -11,3 +11,4 @@
 7130 user      5             用户
 7140 payment   6             支付
 7150 report    7             报表
+7160 job       -             定时任务
