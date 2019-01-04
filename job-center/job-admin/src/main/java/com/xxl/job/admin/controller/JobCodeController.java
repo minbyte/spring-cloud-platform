@@ -30,7 +30,7 @@ public class JobCodeController {
 	private XxlJobLogGlueDao xxlJobLogGlueDao;
 
 	@RequestMapping
-	public String index(Model model, int jobId) {
+	public String index(Model model, int jobId,String from) {
 		XxlJobInfo jobInfo = xxlJobInfoDao.loadById(jobId);
 		List<XxlJobLogGlue> jobLogGlues = xxlJobLogGlueDao.findByJobId(jobId);
 
@@ -46,7 +46,7 @@ public class JobCodeController {
 
 		model.addAttribute("jobInfo", jobInfo);
 		model.addAttribute("jobLogGlues", jobLogGlues);
-		return "jobcode/jobcode.index";
+		return "jobcode/jobcode.index" + ("cloud".equals(from)?".cloud":"");
 	}
 	
 	@RequestMapping("/save")

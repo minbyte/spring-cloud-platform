@@ -45,7 +45,7 @@ public class JobLogController {
 	public XxlJobLogDao xxlJobLogDao;
 
 	@RequestMapping
-	public String index(Model model, @RequestParam(required = false, defaultValue = "0") Integer jobId) {
+	public String index(Model model, @RequestParam(required = false, defaultValue = "0") Integer jobId,String from) {
 
 		// 执行器列表
 		List<XxlJobGroup> jobGroupList =  xxlJobGroupDao.findAll();
@@ -57,7 +57,7 @@ public class JobLogController {
 			model.addAttribute("jobInfo", jobInfo);
 		}
 
-		return "joblog/joblog.index";
+		return "joblog/joblog.index" + ("cloud".equals(from)?".cloud":"");
 	}
 
 	@RequestMapping("/getJobsByGroup")
@@ -99,7 +99,7 @@ public class JobLogController {
 	}
 
 	@RequestMapping("/logDetailPage")
-	public String logDetailPage(int id, Model model){
+	public String logDetailPage(int id, Model model,String from){
 
 		// base check
 		ReturnT<String> logStatue = ReturnT.SUCCESS;
@@ -113,7 +113,7 @@ public class JobLogController {
         model.addAttribute("executorAddress", jobLog.getExecutorAddress());
         model.addAttribute("triggerTime", jobLog.getTriggerTime().getTime());
         model.addAttribute("logId", jobLog.getId());
-		return "joblog/joblog.detail";
+		return "joblog/joblog.detail" + ("cloud".equals(from)?".cloud":"");
 	}
 
 	@RequestMapping("/logDetailCat")

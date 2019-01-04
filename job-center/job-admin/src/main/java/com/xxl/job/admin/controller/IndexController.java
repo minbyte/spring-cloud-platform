@@ -33,12 +33,12 @@ public class IndexController {
 	private XxlJobService xxlJobService;
 
 	@RequestMapping("/")
-	public String index(Model model) {
+	public String index(Model model,String from) {
 
 		Map<String, Object> dashboardMap = xxlJobService.dashboardInfo();
 		model.addAllAttributes(dashboardMap);
 
-		return "index";
+		return "index" + ("cloud".equals(from)?".cloud":"");
 	}
 
     @RequestMapping("/chartInfo")

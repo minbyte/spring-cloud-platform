@@ -34,7 +34,7 @@ public class JobInfoController {
 	private XxlJobService xxlJobService;
 	
 	@RequestMapping
-	public String index(Model model, @RequestParam(required = false, defaultValue = "-1") int jobGroup) {
+	public String index(Model model, @RequestParam(required = false, defaultValue = "-1") int jobGroup,String from) {
 
 		// 枚举-字典
 		model.addAttribute("ExecutorRouteStrategyEnum", ExecutorRouteStrategyEnum.values());	// 路由策略-列表
@@ -46,7 +46,7 @@ public class JobInfoController {
 		model.addAttribute("JobGroupList", jobGroupList);
 		model.addAttribute("jobGroup", jobGroup);
 
-		return "jobinfo/jobinfo.index";
+		return "jobinfo/jobinfo.index" + ("cloud".equals(from)?".cloud":"");
 	}
 	
 	@RequestMapping("/pageList")

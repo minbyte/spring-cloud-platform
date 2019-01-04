@@ -36,13 +36,13 @@ public class JobGroupController {
 	public XxlJobGroupDao xxlJobGroupDao;
 
 	@RequestMapping
-	public String index(Model model) {
+	public String index(Model model,String from) {
 
 		// job group (executor)
 		List<XxlJobGroup> list = xxlJobGroupDao.findAll();
 
 		model.addAttribute("list", list);
-		return "jobgroup/jobgroup.index";
+		return "jobgroup/jobgroup.index" + ("cloud".equals(from)?".cloud":"");
 	}
 
 	@RequestMapping("/save")
