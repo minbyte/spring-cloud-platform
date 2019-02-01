@@ -8,12 +8,17 @@
 	</parent>
 	<artifactId>nacos-consumer</artifactId>
 
+	<properties>
+		<spring-cloud-openfeign.version>2.0.0.RELEASE</spring-cloud-openfeign.version>
+		<spring-cloud-netflix.version>2.0.0.RELEASE</spring-cloud-netflix.version>
+	</properties>
+
 	<dependencies>
 		<!-- nacos 客户端-->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-alibaba-nacos-discovery</artifactId>
-			<version>0.2.0.RELEASE</version>
+			<version>0.2.1.RELEASE</version>
 		</dependency>
 		<!-- boot 健康监控 -->
 		<dependency>
@@ -24,6 +29,18 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+			<version>${spring-cloud-netflix.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+			<version>${spring-cloud-openfeign.version}</version>
 		</dependency>
 	</dependencies>
 

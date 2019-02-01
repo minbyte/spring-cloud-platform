@@ -13,7 +13,7 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-alibaba-nacos-discovery</artifactId>
-			<version>0.2.0.RELEASE</version>
+			<version>0.2.1.RELEASE</version>
 		</dependency>
 		<!-- boot 健康监控 -->
 		<dependency>
