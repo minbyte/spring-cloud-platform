@@ -4,15 +4,20 @@ import com.mindasoft.cloud.security.oauth2.RedisClientDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.client.InMemoryClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
+import org.springframework.security.oauth2.provider.code.RandomValueAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+
+import javax.annotation.Resource;
 
 /**
  * @author: min
@@ -27,12 +32,13 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      * ClientDetails加载数据源
      * @see ClientDetailsServiceConfig
      */
-    @Autowired(required = false)
-    private InMemoryClientDetailsService inMemoryClientDetailsService;
-    @Autowired(required = false)
-    private JdbcClientDetailsService jdbcClientDetailsService;
-    @Autowired(required = false)
-    private RedisClientDetailsService redisClientDetailsService;
+    private ClientDetailsService clientDetailsService;
+//    @Autowired(required = false)
+//    private InMemoryClientDetailsService inMemoryClientDetailsService;
+//    @Autowired(required = false)
+//    private JdbcClientDetailsService jdbcClientDetailsService;
+//    @Autowired(required = false)
+//    private RedisClientDetailsService redisClientDetailsService;
 
     /**
      * token存储配置
@@ -42,7 +48,13 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private TokenStore tokenStore;
 
     @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired(required = false)
+    private RandomValueAuthorizationCodeServices authorizationCodeServices;
 
     /**
      * @see SecurityHandlerConfig
@@ -57,13 +69,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        if(null != inMemoryClientDetailsService){
-            clients.withClientDetails(inMemoryClientDetailsService);
-        }else if(null != jdbcClientDetailsService){
-            clients.withClientDetails(jdbcClientDetailsService);
-        }else if(null != redisClientDetailsService){
-            clients.withClientDetails(redisClientDetailsService);
-        }
+        clients.withClientDetails(clientDetailsService);
     }
 
     /**
@@ -73,9 +79,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.tokenStore(tokenStore); // token存储
-        endpoints.authenticationManager(authenticationManager);
-        endpoints.exceptionTranslator(webResponseExceptionTranslator);  // 返回处理
+        endpoints.authenticationManager(authenticationManager)
+                .tokenStore(tokenStore) // token存储
+                .authorizationCodeServices(authorizationCodeServices) //authCode 存储
+                .userDetailsService(userDetailsService) // 用户信息
+                .exceptionTranslator(webResponseExceptionTranslator);// 返回处理
     }
 
     /**

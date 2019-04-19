@@ -1,5 +1,6 @@
 package com.mindasoft.cloud.security.config;
 
+import com.mindasoft.cloud.security.oauth2.RedisAuthorizationCodeServices;
 import com.mindasoft.cloud.security.oauth2.RedisClientDetailsService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +10,8 @@ import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.security.oauth2.provider.client.InMemoryClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
+import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.code.RandomValueAuthorizationCodeServices;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -30,35 +33,49 @@ public class ClientDetailsServiceConfig {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Bean
-    @ConditionalOnProperty(prefix="security.oauth2.clientDetails.load",name="type" ,havingValue="inMemory" ,matchIfMissing=true)
+    @ConditionalOnProperty(prefix="security.oauth2.client",name="storeType" ,havingValue="inMemory" ,matchIfMissing=true)
     public InMemoryClientDetailsService inMemoryClientDetailsService(){
         InMemoryClientDetailsService clientDetailsService = new InMemoryClientDetailsService();
 
         Map<String, ClientDetails> clientDetailsStore = new HashMap();
         BaseClientDetails clientDetails = new BaseClientDetails();
-        clientDetails.setClientId("console");
-        clientDetails.setClientSecret("console");
-        clientDetails.setScope(new ArrayList<String>(){{add("web");}});
-        clientDetails.setAuthorizedGrantTypes(new ArrayList<String>(){{add("password");add("implicit");}});
+        clientDetails.setClientId("app");
+        clientDetails.setClientSecret("app");
+        clientDetails.setScope(new ArrayList<String>(){{add("app");}});
+        clientDetails.setAuthorizedGrantTypes(new ArrayList<String>(){{add("authorization_code");add("refresh_token");add("password");add("implicit");}});
         clientDetails.setAccessTokenValiditySeconds(3600);
         clientDetailsStore.put(clientDetails.getClientId(),clientDetails);
         clientDetailsService.setClientDetailsStore(clientDetailsStore);
-
         return clientDetailsService;
     }
 
     @Bean
-    @ConditionalOnProperty(prefix="security.oauth2.clientDetails.load",name="type" ,havingValue="jdbc" ,matchIfMissing=false)
+    @ConditionalOnProperty(prefix="security.oauth2.client",name="storeType" ,havingValue="jdbc" ,matchIfMissing=false)
     public JdbcClientDetailsService jdbcClientDetailsService() {
         JdbcClientDetailsService clientDetailsService = new JdbcClientDetailsService(dataSource);
         return clientDetailsService;
     }
 
     @Bean // 声明 ClientDetails实现
-    @ConditionalOnProperty(prefix = "security.oauth2.clientDetails.load", name = "type", havingValue = "redis", matchIfMissing=false)
+    @ConditionalOnProperty(prefix = "security.oauth2.client", name = "storeType", havingValue = "redis", matchIfMissing=false)
     public RedisClientDetailsService redisClientDetailsService() {
         RedisClientDetailsService clientDetailsService = new RedisClientDetailsService(dataSource);
         clientDetailsService.setRedisTemplate(redisTemplate);
         return clientDetailsService;
+    }
+
+    //*以下是AuthorizationCode  ，默认InMemoryAuthorizationCodeServices
+    @Bean
+    @ConditionalOnProperty(prefix="security.oauth2.client",name="storeType" ,havingValue="jdbc" ,matchIfMissing=false)
+    public JdbcAuthorizationCodeServices jdbcAuthorizationCodeServices() {
+        return new JdbcAuthorizationCodeServices(dataSource);
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "security.oauth2.client", name = "storeType", havingValue = "redis", matchIfMissing=false)
+    public RedisAuthorizationCodeServices redisAuthorizationCodeServices() {
+        RedisAuthorizationCodeServices redisAuthorizationCodeServices = new RedisAuthorizationCodeServices();
+        redisAuthorizationCodeServices.setRedisTemplate(redisTemplate);
+        return redisAuthorizationCodeServices;
     }
 }

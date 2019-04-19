@@ -1,6 +1,7 @@
 package com.mindasoft.cloud.security.config;
 
 import com.mindasoft.cloud.security.oauth2.DefaultUserDetailsService;
+import com.mindasoft.cloud.security.properties.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -10,7 +11,17 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+import sun.security.util.SecurityConstants;
+
+import javax.annotation.Resource;
 
 /**
  * 在WebSecurityConfigurerAdapter不拦截oauth要开放的资源
@@ -31,10 +42,33 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private DefaultUserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private SecurityProperties securityProperties;
+
+    @Autowired
+    private AuthenticationSuccessHandler authenticationSuccessHandler;
+    @Autowired
+    private AuthenticationFailureHandler authenticationFailureHandler;
+    @Resource
+    private LogoutHandler logoutHandler;
+
+    @Autowired(required = false)
+    private AuthenticationEntryPoint authenticationEntryPoint;
+
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    /**
+     * 全局用户信息
+     */
     @Autowired
     public void globalUserDetails(final AuthenticationManagerBuilder auth) throws Exception {// @formatter:off
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
@@ -46,46 +80,36 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.csrf().disable()
-            .anonymous().disable()
-            .cors();
-
         http.authorizeRequests()
-            .antMatchers(HttpMethod.OPTIONS).permitAll()
-            .anyRequest().authenticated();
+                .antMatchers(HttpMethod.OPTIONS).permitAll()
+                .antMatchers(securityProperties.getIgnore().getUrls()).permitAll()
+                .anyRequest().authenticated()
+            .and().formLogin()
+                .loginPage("/login.html")
+                .loginProcessingUrl("/user/login")
+                .successHandler(authenticationSuccessHandler)
+                .failureHandler(authenticationFailureHandler)
+            .and().logout()
+                .logoutUrl("/oauth/remove/token")
+                .logoutSuccessUrl("/login.html")
+                .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
+                .addLogoutHandler(logoutHandler)
+            .clearAuthentication(true)
+            .and().csrf().disable()// 禁用 跨站请求伪造
+            .headers().frameOptions().disable().cacheControl(); //允许使用iframe 嵌套，避免swagger-ui 不被加载的问题;
 
-        http.formLogin().and()
-            .httpBasic();
+        // 基于密码 等模式可以无session,不支持授权码模式
+        if (authenticationEntryPoint != null) {
+            http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
+            http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        } else {
+            // 授权码模式单独处理，需要session的支持，此模式可以支持所有oauth2的认证
+            http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
+        }
 
-//        super.configure(http);
     }
 
-    /**
-     * 监控中心和swagger需要访问的url
-     */
-    private static final String[] ENDPOINTS = {"/actuator/health", "/actuator/env", "/actuator/metrics/**", "/actuator/trace", "/actuator/dump",
-            "/actuator/jolokia", "/actuator/info", "/actuator/logfile", "/actuator/refresh", "/actuator/flyway", "/actuator/liquibase",
-            "/actuator/heapdump", "/actuator/loggers", "/actuator/auditevents", "/actuator/env/PID", "/actuator/jolokia/**",
-            "/actuator/archaius/**", "/actuator/beans/**",  "/actuator/httptrace",
-            "/v2/api-docs/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**" ,
-            "/configuration/ui","/configuration/security","/doc.html",
-            "/druid/**","/login.html"};
 
-    /**
-     * 设置无需验证请求路径
-     */
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(ENDPOINTS);
-        web.ignoring().antMatchers("/js/**");
-        web.ignoring().antMatchers("/css/**");
-        web.ignoring().antMatchers("/health");
-    }
 
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
 
 }

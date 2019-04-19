@@ -47,9 +47,11 @@ spring:
 
 security:
   oauth2:
+    resource:
+          id: ${spring.application.name}
     token:
       store:
         type: jdbc  # token存储配置：inMemory，jdbc，redis，clusterRedis，jwt
     clientDetails:
       load:
-        type: jdbc  # clientDetails加载配置：inMemory，jdbc，redis
+        type: jdbc  # client加载配置：inMemory，jdbc，redis

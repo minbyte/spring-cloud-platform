@@ -15,21 +15,25 @@
     <dependencies>
         <dependency>
             <groupId>com.mindasoft.cloud</groupId>
+            <artifactId>security-resource</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mindasoft.cloud</groupId>
             <artifactId>admins-feign</artifactId>
             <version>${admins.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.mindasoft.cloud</groupId>
             <artifactId>commons-core</artifactId>
             <version>${commons.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.mindasoft.cloud</groupId>
             <artifactId>commons-redis</artifactId>
             <version>${commons.version}</version>
         </dependency>
+
 
         <!-- 测试框架-->
         <dependency>

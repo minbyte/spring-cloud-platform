@@ -1,10 +1,13 @@
 package com.mindasoft.cloud.security.config;
 
-import com.mindasoft.cloud.commons.util.OAuth2Utils;
+import com.mindasoft.cloud.security.util.OAuth2Utils;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.cloud.openfeign.FeignClientsConfiguration;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -13,14 +16,18 @@ import org.springframework.context.annotation.Configuration;
  * @date: 2018/12/21 10:55
  * @version: 1.0.0
  */
-@Configuration
-public class RequestInterceptorConfig implements RequestInterceptor {
+@ConditionalOnBean({ FeignClientsConfiguration.class})
+public class FeignInterceptorTokenConfig implements RequestInterceptor {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
 
     private static final String BEARER_TOKEN_TYPE = "Bearer";
 
+    /**
+     * 使用feign client访问别的微服务时，将access_token放入参数或者header ，Authorization:Bearer xxx
+     * 或者url?access_token=xxx
+     */
     @Override
     public void apply(RequestTemplate requestTemplate) {
         String accessToken = OAuth2Utils.getAccessToken();

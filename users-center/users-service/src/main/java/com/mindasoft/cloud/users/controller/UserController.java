@@ -6,7 +6,6 @@ import java.util.Map;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.mindasoft.cloud.users.entity.UserEntity;
@@ -34,7 +33,7 @@ public class UserController {
      * 列表
      */
     @GetMapping("/list")
-    @PreAuthorize("hasAuthority('users:user:list')")
+//    @PreAuthorize("hasAuthority('users:user:list')")
     @ApiOperation(value = "列表")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = userService.queryPage(params);
@@ -46,7 +45,7 @@ public class UserController {
      * 信息
      */
     @GetMapping("/info/{userId}")
-    @PreAuthorize("hasAuthority('users:user:info')")
+//    @PreAuthorize("hasAuthority('users:user:info')")
     @ApiOperation(value = "信息")
     public R info(@PathVariable("userId") Integer userId){
         UserEntity user = userService.selectById(userId);
@@ -57,7 +56,7 @@ public class UserController {
      * 保存
      */
     @PostMapping("/save")
-    @PreAuthorize("hasAuthority('users:user:save')")
+//    @PreAuthorize("hasAuthority('users:user:save')")
     @ApiOperation(value = "保存")
     public R save(@RequestBody UserEntity user){
         userService.insert(user);
@@ -68,7 +67,7 @@ public class UserController {
      * 修改
      */
     @PutMapping("/update")
-    @PreAuthorize("hasAuthority('users:user:update')")
+//    @PreAuthorize("hasAuthority('users:user:update')")
     @ApiOperation(value = "修改")
     public R update(@RequestBody UserEntity user){
         userService.updateById(user);
@@ -79,7 +78,7 @@ public class UserController {
      * 删除
      */
     @DeleteMapping("/delete")
-    @PreAuthorize("hasAuthority('users:user:delete')")
+//    @PreAuthorize("hasAuthority('users:user:delete')")
     @ApiOperation(value = "删除")
     public R delete(@RequestBody Integer[] userIds){
         userService.deleteBatchIds(Arrays.asList(userIds));

@@ -21,6 +21,7 @@
 
     <modules>
         <module>security-service</module>
+        <module>security-resource</module>
     </modules>
 
 </project>

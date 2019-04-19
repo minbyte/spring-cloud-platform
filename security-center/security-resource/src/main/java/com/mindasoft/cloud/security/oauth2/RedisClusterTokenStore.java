@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 * redis集群存储token
 */
  
-public class ClusterRedisTokenStore implements TokenStore {
+public class RedisClusterTokenStore implements TokenStore {
 	
 	private static final String ACCESS = "access:";
 	private static final String AUTH_TO_ACCESS = "auth_to_access:";

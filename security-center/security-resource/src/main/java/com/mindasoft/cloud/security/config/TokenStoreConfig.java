@@ -1,6 +1,6 @@
 package com.mindasoft.cloud.security.config;
 
-import com.mindasoft.cloud.security.oauth2.ClusterRedisTokenStore;
+import com.mindasoft.cloud.security.oauth2.RedisClusterTokenStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -20,11 +20,9 @@ import javax.sql.DataSource;
 * @author owen 624191343@qq.com
  * @version 创建时间：2017年11月12日 上午22:57:51
 * 类说明 
-* redis存储token
+* token存储配置
 */
-@Configuration
 public class TokenStoreConfig {
-
 
 	@Resource
 	private DataSource dataSource ;
@@ -37,7 +35,7 @@ public class TokenStoreConfig {
 	 * @return
 	 */
 	@Bean
-	@ConditionalOnProperty(prefix="security.oauth2.token.store",name="type" ,havingValue="inMemory" ,matchIfMissing=false)
+	@ConditionalOnProperty(prefix="security.oauth2.token",name="storeType" ,havingValue="inMemory" ,matchIfMissing=false)
 	public InMemoryTokenStore inMemoryTokenStore() {
 		return new InMemoryTokenStore();
 	}
@@ -47,7 +45,7 @@ public class TokenStoreConfig {
 	 * @return
 	 */
 	@Bean
-	@ConditionalOnProperty(prefix="security.oauth2.token.store",name="type" ,havingValue="jdbc" ,matchIfMissing=false)
+	@ConditionalOnProperty(prefix="security.oauth2.token",name="storeType" ,havingValue="jdbc" ,matchIfMissing=false)
 	public JdbcTokenStore jdbcTokenStore(){
 		return new JdbcTokenStore( dataSource ) ;
 	}
@@ -56,7 +54,7 @@ public class TokenStoreConfig {
 	 * 单台redis服务器
 	 */
 	@Bean
-	@ConditionalOnProperty(prefix="security.oauth2.token.store",name="type" ,havingValue="redis" ,matchIfMissing=true)
+	@ConditionalOnProperty(prefix="security.oauth2.token",name="storeType" ,havingValue="redis" ,matchIfMissing=true)
 	public RedisTokenStore redisTokenStore(){
 		Assert.state(redisTemplate != null, "RedisTemplate must be provided");
 		return new RedisTokenStore( redisTemplate.getConnectionFactory() ) ;
@@ -66,10 +64,10 @@ public class TokenStoreConfig {
 	 * 集群redis
 	 */
 	@Bean
-	@ConditionalOnProperty(prefix="security.oauth2.token.store",name="type" ,havingValue="clusterRedis" ,matchIfMissing=false)
-	public ClusterRedisTokenStore clusterRedisTokenStore(){
+	@ConditionalOnProperty(prefix="security.oauth2.token",name="storeType" ,havingValue="redisCluster" ,matchIfMissing=false)
+	public RedisClusterTokenStore clusterRedisTokenStore(){
 		Assert.state(redisTemplate != null, "RedisTemplate must be provided");
-		ClusterRedisTokenStore redisTemplateStore = new ClusterRedisTokenStore()  ;
+		RedisClusterTokenStore redisTemplateStore = new RedisClusterTokenStore()  ;
 		redisTemplateStore.setRedisTemplate(redisTemplate);
 		return redisTemplateStore ;
 	}
@@ -78,7 +76,7 @@ public class TokenStoreConfig {
 	 * 使用jwt替换原有的uuid生成token方式
 	 */
 	@Configuration
-	@ConditionalOnProperty(prefix="security.oauth2.token.store",name="type" ,havingValue="jwt" ,matchIfMissing=false)
+	@ConditionalOnProperty(prefix="security.oauth2.token",name="storeType" ,havingValue="jwt" ,matchIfMissing=false)
 	public static class JWTTokenConfig {
 		@Bean
 		public JwtTokenStore jwtTokenStore(){

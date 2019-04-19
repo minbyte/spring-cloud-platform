@@ -118,10 +118,3 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds : 1000  #设置超时熔断时间，默认1000(1s)
-
-security:
-  oauth2:
-    resource:
-      id: ${spring.application.name}
-      user-info-uri: http://localhost:7010/security/principal/me
-      prefer-token-info: false
