@@ -42,7 +42,8 @@ public class ClientDetailsServiceConfig {
         clientDetails.setClientId("client");
         clientDetails.setClientSecret("secret");
         clientDetails.setScope(new ArrayList<String>(){{add("app");}});
-        clientDetails.setAuthorizedGrantTypes(new ArrayList<String>(){{add("authorization_code");add("refresh_token");add("password");add("implicit");}});
+        // 授权码模式(authorization_code) 简化模式(implicit) 密码模式(password) 客户端模式(client_credentials)
+        clientDetails.setAuthorizedGrantTypes(new ArrayList<String>(){{add("authorization_code");add("implicit");add("password");add("client_credentials");}});
         clientDetails.setAccessTokenValiditySeconds(3600);
         clientDetailsStore.put(clientDetails.getClientId(),clientDetails);
         clientDetailsService.setClientDetailsStore(clientDetailsStore);

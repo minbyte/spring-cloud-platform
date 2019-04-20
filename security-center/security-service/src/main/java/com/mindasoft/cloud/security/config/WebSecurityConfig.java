@@ -83,7 +83,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers(securityProperties.getIgnore().getUrls()).permitAll()
                 .anyRequest().authenticated()
-//                .and().httpBasic()
+//            .and().httpBasic() // 弹对话框输入账号
             .and().formLogin()
                 .loginPage("/login.html")
                 .loginProcessingUrl("/user/login")
