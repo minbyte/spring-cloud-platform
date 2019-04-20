@@ -20,7 +20,7 @@
         <dependency>
             <groupId>com.mindasoft.cloud</groupId>
             <artifactId>security-resource</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${security.version}</version>
         </dependency>
 
         <!-- 测试框架-->

@@ -2,6 +2,7 @@ package com.mindasoft.cloud.security.config;
 
 import com.mindasoft.cloud.security.oauth2.RedisClientDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,19 +27,21 @@ import javax.annotation.Resource;
  */
 @Configuration
 @EnableAuthorizationServer
+@AutoConfigureAfter(AuthorizationServerEndpointsConfigurer.class)
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
     /**
      * ClientDetails加载数据源
      * @see ClientDetailsServiceConfig
      */
-    private ClientDetailsService clientDetailsService;
-//    @Autowired(required = false)
-//    private InMemoryClientDetailsService inMemoryClientDetailsService;
-//    @Autowired(required = false)
-//    private JdbcClientDetailsService jdbcClientDetailsService;
-//    @Autowired(required = false)
-//    private RedisClientDetailsService redisClientDetailsService;
+//    @Autowired
+//    private ClientDetailsService clientDetailsService;
+    @Autowired(required = false)
+    private InMemoryClientDetailsService inMemoryClientDetailsService;
+    @Autowired(required = false)
+    private JdbcClientDetailsService jdbcClientDetailsService;
+    @Autowired(required = false)
+    private RedisClientDetailsService redisClientDetailsService;
 
     /**
      * token存储配置
@@ -69,7 +72,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.withClientDetails(clientDetailsService);
+//        clients.withClientDetails(clientDetailsService);
+        if(null != inMemoryClientDetailsService){
+            clients.withClientDetails(inMemoryClientDetailsService);
+        }else if(null != jdbcClientDetailsService){
+            clients.withClientDetails(jdbcClientDetailsService);
+        }else if(null != redisClientDetailsService){
+            clients.withClientDetails(redisClientDetailsService);
+        }
     }
 
     /**

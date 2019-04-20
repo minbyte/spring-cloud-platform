@@ -39,8 +39,8 @@ public class ClientDetailsServiceConfig {
 
         Map<String, ClientDetails> clientDetailsStore = new HashMap();
         BaseClientDetails clientDetails = new BaseClientDetails();
-        clientDetails.setClientId("app");
-        clientDetails.setClientSecret("app");
+        clientDetails.setClientId("client");
+        clientDetails.setClientSecret("secret");
         clientDetails.setScope(new ArrayList<String>(){{add("app");}});
         clientDetails.setAuthorizedGrantTypes(new ArrayList<String>(){{add("authorization_code");add("refresh_token");add("password");add("implicit");}});
         clientDetails.setAccessTokenValiditySeconds(3600);

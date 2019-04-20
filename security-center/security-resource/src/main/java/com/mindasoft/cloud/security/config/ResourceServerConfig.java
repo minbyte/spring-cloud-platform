@@ -4,6 +4,7 @@ import com.mindasoft.cloud.security.properties.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,6 +22,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
  * @date: 2018/12/20 9:27
  * @version: 1.0.0
  */
+@Configuration
 @ConditionalOnMissingBean(AuthorizationServerSecurityConfiguration.class)
 @EnableConfigurationProperties(SecurityProperties.class)
 @Import({TokenStoreConfig.class,SecurityHandlerConfig.class,ResourceServerConfiguration.class})

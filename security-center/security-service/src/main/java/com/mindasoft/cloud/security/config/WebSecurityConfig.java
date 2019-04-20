@@ -1,9 +1,10 @@
 package com.mindasoft.cloud.security.config;
 
-import com.mindasoft.cloud.security.oauth2.DefaultUserDetailsService;
 import com.mindasoft.cloud.security.properties.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -19,7 +20,6 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
-import sun.security.util.SecurityConstants;
 
 import javax.annotation.Resource;
 
@@ -37,8 +37,7 @@ import javax.annotation.Resource;
  *  @PostFilter 允许方法调用,但必须按照表达式来过滤方法的结果
  *  @PreFilter 允许方法调用,但必须在进入方法之前过滤输入值
  */
-
-@EnableWebSecurity
+@Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -84,6 +83,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers(securityProperties.getIgnore().getUrls()).permitAll()
                 .anyRequest().authenticated()
+//                .and().httpBasic()
             .and().formLogin()
                 .loginPage("/login.html")
                 .loginProcessingUrl("/user/login")
@@ -94,7 +94,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login.html")
                 .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
                 .addLogoutHandler(logoutHandler)
-            .clearAuthentication(true)
+                .clearAuthentication(true)
             .and().csrf().disable()// 禁用 跨站请求伪造
             .headers().frameOptions().disable().cacheControl(); //允许使用iframe 嵌套，避免swagger-ui 不被加载的问题;
 
@@ -109,6 +109,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security",
+                "/swagger-ui.html", "/webjars/**", "/doc.html", "/login.html");
+        web.ignoring().antMatchers("/js/**");
+        web.ignoring().antMatchers("/css/**");
+        web.ignoring().antMatchers("/health");
+        // 忽略登录界面
+        web.ignoring().antMatchers("/login.html");
+        web.ignoring().antMatchers("/hello.html");
+        web.ignoring().antMatchers("/oauth/user/token");
+        web.ignoring().antMatchers("/oauth/client/token");
+    }
 
 
 

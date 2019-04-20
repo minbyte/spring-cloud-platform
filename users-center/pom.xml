@@ -15,6 +15,7 @@
 
     <properties>
         <commons.version>1.0.0-SNAPSHOT</commons.version>
+        <security.version>1.0.0-SNAPSHOT</security.version>
     </properties>
 
     <modules>

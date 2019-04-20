@@ -80,14 +80,14 @@ header{
 
 
 .login_wrap{
-	background: url(/api-uaa/images/logo_bg.jpg) no-repeat center;
+	background: url(/images/logo_bg.jpg) no-repeat center;
 	/*background-size: 100%;*/
 }
 .logo{
 	width: 500px;
 	height: 150px;
 	margin: 0px auto;
-	background: url(/api-uaa/images/logowz.png) no-repeat center;
+	background: url(/images/logowz.png) no-repeat center;
 }
 .login_box{
 	width: 360px;
