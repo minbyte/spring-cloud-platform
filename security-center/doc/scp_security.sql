@@ -78,9 +78,9 @@ CREATE TABLE `oauth_refresh_token` (
 DROP TABLE IF EXISTS `oauth_code`;
 
 create table oauth_code (
-  create_time timestamp default now(),
   code VARCHAR(255),
-  authentication BLOB
+  authentication BLOB,
+  create_time timestamp default now()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
