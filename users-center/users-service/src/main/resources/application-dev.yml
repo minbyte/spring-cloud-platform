@@ -61,4 +61,4 @@ security:
         paths:
           - /user/info/**
     token:
-      storeType: redis
+      storeType: redis #token存储配置：inMemory，jdbc，redis，clusterRedis，jwt

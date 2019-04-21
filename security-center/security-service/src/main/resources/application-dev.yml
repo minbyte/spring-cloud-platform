@@ -54,23 +54,13 @@ security:
           /user/login,
           /oauth/user/token,
           /oauth/client/token,
+          /oauth/token,
           /oauth/authorize,
           /user/logout,
           /document.html
     token:
-      storeType: jdbc #token存储配置：inMemory，jdbc，redis，clusterRedis，jwt
+      storeType: redis #token存储配置：inMemory，jdbc，redis，clusterRedis，jwt
     client:
-      storeType: inMemory #client加载配置：inMemory，jdbc，redis
+      storeType: jdbc #client加载配置：inMemory，jdbc，redis
     code:
       storeType: inMemory #client加载配置：inMemory，jdbc，redis
-
-#security:
-#  oauth2:
-#    resource:
-#          id: ${spring.application.name}
-#    token:
-#      store:
-#        type: jdbc  # token存储配置：inMemory，jdbc，redis，clusterRedis，jwt
-#    clientDetails:
-#      load:
-#        type: jdbc  # client加载配置：inMemory，jdbc，redis
