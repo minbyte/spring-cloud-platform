@@ -14,23 +14,6 @@ MySQL - 5.6.39 : Database - scp_security
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 USE `scp_security`;
 
-/*Table structure for table `oauth_access_token` */
-
-DROP TABLE IF EXISTS `oauth_access_token`;
-
-CREATE TABLE `oauth_access_token` (
-  `token_id` varchar(256) DEFAULT NULL,
-  `token` blob,
-  `authentication_id` varchar(100) NOT NULL,
-  `user_name` varchar(256) DEFAULT NULL,
-  `client_id` varchar(256) DEFAULT NULL,
-  `authentication` blob,
-  `refresh_token` varchar(256) DEFAULT NULL,
-  PRIMARY KEY (`authentication_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-/*Data for the table `oauth_access_token` */
-
 /*Table structure for table `oauth_client_details` */
 
 DROP TABLE IF EXISTS `oauth_client_details`;
@@ -58,6 +41,25 @@ insert  into `oauth_client_details`(`id`,`client_id`,`resource_ids`,`client_secr
   (1,'app',NULL,'$2a$10$i3F515wEDiB4Gvj9ym9Prui0dasRttEUQ9ink4Wpgb4zEDCAlV8zO','app','app','password,refresh_token',NULL,NULL,180000,NULL,'{}','true'),
   (2,'webApp',NULL,'$2a$10$06msMGYRH8nrm4iVnKFNKOoddB8wOwymVhbUzw/d3ZixD7Nq8ot72','webApp','webApp','authorization_code,password,refresh_token,client_credentials',NULL,NULL,180000,NULL,'{}','true');
 
+
+/*Table structure for table `oauth_access_token` */
+
+DROP TABLE IF EXISTS `oauth_access_token`;
+
+CREATE TABLE `oauth_access_token` (
+  `token_id` varchar(256) DEFAULT NULL,
+  `token` blob,
+  `authentication_id` varchar(100) NOT NULL,
+  `user_name` varchar(256) DEFAULT NULL,
+  `client_id` varchar(256) DEFAULT NULL,
+  `authentication` blob,
+  `refresh_token` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`authentication_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `oauth_access_token` */
+
+
 /*Table structure for table `oauth_refresh_token` */
 
 DROP TABLE IF EXISTS `oauth_refresh_token`;
@@ -69,6 +71,17 @@ CREATE TABLE `oauth_refresh_token` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `oauth_refresh_token` */
+
+
+/*Table structure for table `oauth_code` */
+
+DROP TABLE IF EXISTS `oauth_code`;
+
+create table oauth_code (
+  create_time timestamp default now(),
+  code VARCHAR(255),
+  authentication BLOB
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
