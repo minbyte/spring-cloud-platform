@@ -23,7 +23,7 @@ import com.mindasoft.cloud.commons.util.R;
  * @date 2018-12-27 12:57:15
  */
 @RestController
-@RequestMapping("clientdetails")
+@RequestMapping("clients")
 @Api(tags = "客户端应用api")
 public class ClientDetailsController {
     @Autowired()

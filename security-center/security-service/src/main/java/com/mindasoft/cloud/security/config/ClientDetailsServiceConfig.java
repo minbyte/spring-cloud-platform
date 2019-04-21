@@ -64,19 +64,4 @@ public class ClientDetailsServiceConfig {
         clientDetailsService.setRedisTemplate(redisTemplate);
         return clientDetailsService;
     }
-
-    //*以下是AuthorizationCode  ，默认InMemoryAuthorizationCodeServices
-    @Bean
-    @ConditionalOnProperty(prefix="security.oauth2.client",name="storeType" ,havingValue="jdbc" ,matchIfMissing=false)
-    public JdbcAuthorizationCodeServices jdbcAuthorizationCodeServices() {
-        return new JdbcAuthorizationCodeServices(dataSource);
-    }
-
-    @Bean
-    @ConditionalOnProperty(prefix = "security.oauth2.client", name = "storeType", havingValue = "redis", matchIfMissing=false)
-    public RedisAuthorizationCodeServices redisAuthorizationCodeServices() {
-        RedisAuthorizationCodeServices redisAuthorizationCodeServices = new RedisAuthorizationCodeServices();
-        redisAuthorizationCodeServices.setRedisTemplate(redisTemplate);
-        return redisAuthorizationCodeServices;
-    }
 }

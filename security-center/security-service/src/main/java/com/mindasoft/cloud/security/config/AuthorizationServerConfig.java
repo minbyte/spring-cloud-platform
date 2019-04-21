@@ -34,8 +34,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      * ClientDetails加载数据源
      * @see ClientDetailsServiceConfig
      */
-//    @Autowired
-//    private ClientDetailsService clientDetailsService;
     @Autowired(required = false)
     private InMemoryClientDetailsService inMemoryClientDetailsService;
     @Autowired(required = false)
@@ -72,7 +70,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-//        clients.withClientDetails(clientDetailsService);
         if(null != inMemoryClientDetailsService){
             clients.withClientDetails(inMemoryClientDetailsService);
         }else if(null != jdbcClientDetailsService){
