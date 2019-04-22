@@ -62,7 +62,6 @@ public class SecurityHandlerConfig {
 			public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 												Authentication authentication) throws IOException, ServletException {
 				System.out.println(request.getRequestURL());
-
 				super.onAuthenticationSuccess(request, response, authentication);
 			}
 		};

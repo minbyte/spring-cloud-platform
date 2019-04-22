@@ -8,12 +8,13 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
  *
- * [/oauth/authorize]
- * [/oauth/token]
- * [/oauth/check_token]
- * [/oauth/confirm_access]
- * [/oauth/token_key]
- * [/oauth/error]
+ * [/oauth/authorize] {@link org.springframework.security.oauth2.provider.endpoint.AuthorizationEndpoint}
+ * [/oauth/token] {@link org.springframework.security.oauth2.provider.endpoint.TokenEndpoint}
+ * [/oauth/check_token] {@link org.springframework.security.oauth2.provider.endpoint.CheckTokenEndpoint}
+ * [/oauth/confirm_access] {@link org.springframework.security.oauth2.provider.endpoint.WhitelabelApprovalEndpoint}
+ * [/oauth/token_key] {@link org.springframework.security.oauth2.provider.endpoint.TokenKeyEndpoint}
+ * [/oauth/error] {@link org.springframework.security.oauth2.provider.endpoint.WhitelabelErrorEndpoint}
+ *
  *
  * @author: min
  * @date: 2018/12/17 11:10

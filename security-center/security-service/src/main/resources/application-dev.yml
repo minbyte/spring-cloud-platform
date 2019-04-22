@@ -51,16 +51,11 @@ security:
       ignore:
         paths: >
           /login.html,
-          /user/login,
-          /oauth/user/token,
-          /oauth/client/token,
-          /oauth/token,
           /oauth/authorize,
-          /user/logout,
-          /document.html
+          /oauth/token
     token:
-      storeType: redis #token存储配置：inMemory，jdbc，redis，clusterRedis，jwt
+      storeType: jwt #token存储配置：inMemory，jdbc，redis，jwt
     client:
       storeType: jdbc #client加载配置：inMemory，jdbc，redis
     code:
-      storeType: inMemory #client加载配置：inMemory，jdbc，redis
+      storeType: redis #client加载配置：inMemory，jdbc，redis

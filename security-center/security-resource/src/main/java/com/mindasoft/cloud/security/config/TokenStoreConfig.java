@@ -1,6 +1,6 @@
 package com.mindasoft.cloud.security.config;
 
-import com.mindasoft.cloud.security.oauth2.RedisClusterTokenStore;
+import com.mindasoft.cloud.security.oauth2.RedisTokenStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +10,6 @@ import org.springframework.security.oauth2.provider.token.store.InMemoryTokenSto
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
@@ -50,24 +49,15 @@ public class TokenStoreConfig {
 		return new JdbcTokenStore( dataSource ) ;
 	}
 
-	/**
-	 * 单台redis服务器
-	 */
-	@Bean
-	@ConditionalOnProperty(prefix="security.oauth2.token",name="storeType" ,havingValue="redis" ,matchIfMissing=true)
-	public RedisTokenStore redisTokenStore(){
-		Assert.state(redisTemplate != null, "RedisTemplate must be provided");
-		return new RedisTokenStore( redisTemplate.getConnectionFactory() ) ;
-	}
 
 	/**
-	 * 集群redis
+	 * redis存储
 	 */
 	@Bean
-	@ConditionalOnProperty(prefix="security.oauth2.token",name="storeType" ,havingValue="redisCluster" ,matchIfMissing=false)
-	public RedisClusterTokenStore clusterRedisTokenStore(){
+	@ConditionalOnProperty(prefix="security.oauth2.token",name="storeType" ,havingValue="redis" ,matchIfMissing=false)
+	public RedisTokenStore clusterRedisTokenStore(){
 		Assert.state(redisTemplate != null, "RedisTemplate must be provided");
-		RedisClusterTokenStore redisTemplateStore = new RedisClusterTokenStore()  ;
+		RedisTokenStore redisTemplateStore = new RedisTokenStore()  ;
 		redisTemplateStore.setRedisTemplate(redisTemplate);
 		return redisTemplateStore ;
 	}

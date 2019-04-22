@@ -14,13 +14,10 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /** 
-* @author owen 624191343@qq.com
- * @version 创建时间：2017年11月12日 上午22:57:51
-* 类说明 
-* redis集群存储token
-*/
- 
-public class RedisClusterTokenStore implements TokenStore {
+ * redis存储token ，默认提供{@link org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore}
+ * conn.set方法以及被弃用，所以从写
+**/
+public class RedisTokenStore implements TokenStore {
 	
 	private static final String ACCESS = "access:";
 	private static final String AUTH_TO_ACCESS = "auth_to_access:";

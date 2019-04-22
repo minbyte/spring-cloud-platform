@@ -2,6 +2,7 @@ package com.mindasoft.cloud.security.config;
 
 import com.mindasoft.cloud.security.properties.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -38,6 +39,7 @@ import javax.annotation.Resource;
  *  @PreFilter 允许方法调用,但必须在进入方法之前过滤输入值
  */
 @Configuration
+@EnableConfigurationProperties(SecurityProperties.class)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -111,16 +113,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security",
-                "/swagger-ui.html", "/webjars/**", "/doc.html", "/login.html");
         web.ignoring().antMatchers("/js/**");
         web.ignoring().antMatchers("/css/**");
-        web.ignoring().antMatchers("/health");
-        // 忽略登录界面
-        web.ignoring().antMatchers("/login.html");
-        web.ignoring().antMatchers("/hello.html");
-        web.ignoring().antMatchers("/oauth/user/token");
-        web.ignoring().antMatchers("/oauth/client/token");
+        web.ignoring().antMatchers("/images/**");
     }
 
 

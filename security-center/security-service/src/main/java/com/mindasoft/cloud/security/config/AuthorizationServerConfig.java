@@ -4,6 +4,7 @@ import com.mindasoft.cloud.security.oauth2.RedisClientDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -28,6 +29,7 @@ import javax.annotation.Resource;
 @Configuration
 @EnableAuthorizationServer
 @AutoConfigureAfter(AuthorizationServerEndpointsConfigurer.class)
+@Import(TokenStoreConfig.class)
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
     /**
