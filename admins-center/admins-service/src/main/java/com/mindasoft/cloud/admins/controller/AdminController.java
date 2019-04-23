@@ -3,25 +3,25 @@ package com.mindasoft.cloud.admins.controller;
 import com.mindasoft.cloud.admins.entity.AdminEntity;
 import com.mindasoft.cloud.admins.service.AdminRoleService;
 import com.mindasoft.cloud.admins.service.AdminService;
-import com.mindasoft.cloud.commons.util.OAuth2Utils;
 import com.mindasoft.cloud.commons.util.PageUtils;
 import com.mindasoft.cloud.commons.util.R;
 import com.mindasoft.cloud.commons.validator.ValidatorUtils;
 import com.mindasoft.cloud.commons.validator.group.AddGroup;
 import com.mindasoft.cloud.commons.validator.group.UpdateGroup;
-import com.mindasoft.cloud.models.LoginPerson;
+import com.mindasoft.cloud.models.admins.LoginAdmin;
+import com.mindasoft.cloud.security.util.OAuth2Utils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.ArrayUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 管理员接口
@@ -41,27 +41,17 @@ public class AdminController {
 
     @GetMapping(value = "/login", params = "username")
     @ApiOperation(value = "登陆")
-    public R<LoginPerson> login(String username){
-        LoginPerson loginPerson = adminService.getLoginPerson(username);
-        if(null != loginPerson){
-            return R.ok().put(loginPerson);
-        }
-        return R.ok();
-    }
-
-    @PostMapping("/logout")
-    @ApiOperation(value = "登出")
-    public R logout(String token){
-        return R.ok();
+    public LoginAdmin login(String username){
+        return adminService.login(username);
     }
 
     /**
      * 通过获取信息
      */
     @GetMapping("/current")
-    @ApiOperation(value = "获取当前用户信息")
-    public R<LoginPerson> current(){
-        return R.ok().put(OAuth2Utils.getLoginPerson());
+    @ApiOperation(value = "获取当前管理员信息")
+    public R<LoginAdmin> current(){
+        return R.ok().put(OAuth2Utils.getLoginAdmin());
     }
 
     /**
@@ -104,7 +94,7 @@ public class AdminController {
     @ApiOperation(value = "保存")
     public R save(@RequestBody AdminEntity admin){
         ValidatorUtils.validateEntity(admin, AddGroup.class);
-        admin.setCreateAdminId(OAuth2Utils.getId());
+        admin.setCreateAdminId(OAuth2Utils.getAdminId());
         adminService.save(admin);
         return R.ok();
     }
@@ -117,7 +107,7 @@ public class AdminController {
     @ApiOperation(value = "修改")
     public R update(@RequestBody AdminEntity admin){
         ValidatorUtils.validateEntity(admin, UpdateGroup.class);
-        admin.setCreateAdminId(OAuth2Utils.getId());
+        admin.setCreateAdminId(OAuth2Utils.getAdminId());
         adminService.update(admin);
         return R.ok();
     }
@@ -132,7 +122,7 @@ public class AdminController {
         if(ArrayUtils.contains(adminIds, 1L)){
             return R.fail("系统管理员不能删除");
         }
-        if(ArrayUtils.contains(adminIds, OAuth2Utils.getId())){
+        if(ArrayUtils.contains(adminIds, OAuth2Utils.getAdminId())){
             return R.fail("当前用户不能删除");
         }
         adminService.deleteBatchIds(Arrays.asList(adminIds));

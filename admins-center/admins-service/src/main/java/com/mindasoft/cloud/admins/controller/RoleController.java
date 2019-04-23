@@ -1,14 +1,12 @@
 package com.mindasoft.cloud.admins.controller;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.mindasoft.cloud.admins.constants.Constant;
+import com.mindasoft.cloud.admins.entity.RoleEntity;
 import com.mindasoft.cloud.admins.service.RoleMenuService;
-import com.mindasoft.cloud.commons.util.OAuth2Utils;
+import com.mindasoft.cloud.admins.service.RoleService;
+import com.mindasoft.cloud.commons.util.PageUtils;
+import com.mindasoft.cloud.commons.util.R;
 import com.mindasoft.cloud.commons.validator.ValidatorUtils;
+import com.mindasoft.cloud.security.util.OAuth2Utils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -17,10 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import com.mindasoft.cloud.admins.entity.RoleEntity;
-import com.mindasoft.cloud.admins.service.RoleService;
-import com.mindasoft.cloud.commons.util.PageUtils;
-import com.mindasoft.cloud.commons.util.R;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 
@@ -49,7 +46,7 @@ public class RoleController {
         Map<String, Object> map = new HashMap<>();
 
         //如果不是超级管理员，则只查询自己所拥有的角色列表
-        Long adminId = OAuth2Utils.getId();
+        Long adminId = OAuth2Utils.getAdminId();
         if(1 != adminId){
             map.put("createAdminId", adminId);
         }
@@ -69,7 +66,7 @@ public class RoleController {
     })
     public R list(@RequestParam Map<String, Object> params){
         //如果不是超级管理员，则只查询自己创建的角色列表
-        Long adminId = OAuth2Utils.getId();
+        Long adminId = OAuth2Utils.getAdminId();
         if(1 != adminId){
             params.put("createAdminId", adminId);
         }
@@ -103,7 +100,7 @@ public class RoleController {
     @ApiOperation(value = "保存")
     public R save(@RequestBody RoleEntity role){
         ValidatorUtils.validateEntity(role);
-        role.setCreateAdminId(OAuth2Utils.getId());
+        role.setCreateAdminId(OAuth2Utils.getAdminId());
 
         roleService.save(role);
         return R.ok();
@@ -117,7 +114,7 @@ public class RoleController {
     @ApiOperation(value = "修改")
     public R update(@RequestBody RoleEntity role){
         ValidatorUtils.validateEntity(role);
-        role.setCreateAdminId(OAuth2Utils.getId());
+        role.setCreateAdminId(OAuth2Utils.getAdminId());
 
         roleService.update(role);
         return R.ok();

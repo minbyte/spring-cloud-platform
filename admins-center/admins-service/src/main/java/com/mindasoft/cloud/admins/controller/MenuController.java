@@ -1,26 +1,19 @@
 package com.mindasoft.cloud.admins.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.mindasoft.cloud.admins.constants.Constant;
+import com.mindasoft.cloud.admins.entity.MenuEntity;
+import com.mindasoft.cloud.admins.service.MenuService;
 import com.mindasoft.cloud.commons.exception.BaseException;
-import com.mindasoft.cloud.commons.util.OAuth2Utils;
+import com.mindasoft.cloud.commons.util.R;
+import com.mindasoft.cloud.security.util.OAuth2Utils;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import com.mindasoft.cloud.admins.entity.MenuEntity;
-import com.mindasoft.cloud.admins.service.MenuService;
-import com.mindasoft.cloud.commons.util.PageUtils;
-import com.mindasoft.cloud.commons.util.R;
+import java.util.List;
 
 
 
@@ -43,7 +36,7 @@ public class MenuController {
      */
     @GetMapping("/nav")
     public R nav(){
-        List<MenuEntity> menuList = menuService.getAdminMenuList(OAuth2Utils.getId());
+        List<MenuEntity> menuList = menuService.getAdminMenuList(OAuth2Utils.getAdminId());
         return R.ok().put( menuList);
     }
 

@@ -15,11 +15,11 @@
 
     <properties>
         <commons.version>1.0.0-SNAPSHOT</commons.version>
+        <security.version>1.0.0-SNAPSHOT</security.version>
     </properties>
 
     <modules>
         <module>admins-service</module>
-        <module>admins-business</module>
         <module>admins-feign</module>
     </modules>
 

@@ -2,7 +2,7 @@ package com.mindasoft.cloud.admins.fallback;
 
 import com.mindasoft.cloud.admins.feign.AdminFeign;
 import com.mindasoft.cloud.commons.util.R;
-import com.mindasoft.cloud.models.LoginPerson;
+import com.mindasoft.cloud.models.admins.LoginAdmin;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class AdminFeignFallback implements AdminFeign {
 
     @Override
-    public R<LoginPerson> loginInfo(String username) {
-        return R.fail();
+    public LoginAdmin login(String username) {
+        return null;
     }
 }

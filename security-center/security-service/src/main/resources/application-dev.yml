@@ -50,9 +50,7 @@ security:
       id: ${spring.application.name}
       ignore:
         paths: >
-          /login.html,
-          /oauth/authorize,
-          /oauth/token
+          /login.html
     token:
       storeType: redis #token存储配置：inMemory，jdbc，redis，jwt
     client:

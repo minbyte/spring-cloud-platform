@@ -3,7 +3,7 @@ package com.mindasoft.cloud.admins.feign;
 import com.mindasoft.cloud.admins.constants.FeignClientInstances;
 import com.mindasoft.cloud.admins.fallback.AdminFeignFallback;
 import com.mindasoft.cloud.commons.util.R;
-import com.mindasoft.cloud.models.LoginPerson;
+import com.mindasoft.cloud.models.admins.LoginAdmin;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface AdminFeign {
 
     @GetMapping(value ="/admin/login",params = "username")
-    public R<LoginPerson> loginInfo(@RequestParam("username") String username);
+    public LoginAdmin login(@RequestParam("username") String username);
 
 }

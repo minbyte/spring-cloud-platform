@@ -17,11 +17,15 @@
             <artifactId>commons-models</artifactId>
             <version>${commons.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.mindasoft.cloud</groupId>
-            <artifactId>admins-business</artifactId>
-            <version>${project.version}</version>
+            <artifactId>commons-core</artifactId>
+            <version>${commons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mindasoft.cloud</groupId>
+            <artifactId>security-resource</artifactId>
+            <version>${security.version}</version>
         </dependency>
 
         <!-- 测试框架-->

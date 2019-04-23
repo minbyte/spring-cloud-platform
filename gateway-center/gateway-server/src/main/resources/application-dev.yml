@@ -30,12 +30,3 @@ spring:
         filters:
           - SwaggerHeaderFilter
           - StripPrefix=1
-
-
-ignore:
-  urls:
-    - /*
-secret:
-  key: vxc
-  urls:
-    - /sta/*

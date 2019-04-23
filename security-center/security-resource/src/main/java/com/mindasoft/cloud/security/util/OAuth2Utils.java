@@ -1,18 +1,25 @@
 package com.mindasoft.cloud.security.util;
 
+import com.mindasoft.cloud.models.admins.LoginAdmin;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.exceptions.UnapprovedClientAuthenticationException;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Enumeration;
+import java.util.LinkedHashMap;
 
 /**
  * @author: min
@@ -49,28 +56,28 @@ public class OAuth2Utils {
         return details;
     }
 
-//    public static LoginPerson getLoginPerson() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (authentication instanceof OAuth2Authentication) {
-//            OAuth2Authentication oAuth2Auth = (OAuth2Authentication) authentication;
-//            authentication = oAuth2Auth.getUserAuthentication();
-//            if (authentication instanceof UsernamePasswordAuthenticationToken || authentication instanceof PreAuthenticatedAuthenticationToken){
-//                LinkedHashMap authenticationToken = (LinkedHashMap) authentication.getDetails();
-//                LinkedHashMap principal = (LinkedHashMap)authenticationToken.get("principal");
-//                LoginPerson loginPerson = new LoginPerson();
-//                try {
-//                    BeanUtils.populate(loginPerson,principal);
-//                    loginPerson.setEnabled((Boolean) principal.get("enabled"));
-//                } catch (IllegalAccessException e) {
-//                    e.printStackTrace();
-//                } catch (InvocationTargetException e) {
-//                    e.printStackTrace();
-//                }
-//                return loginPerson ;
-//            }
-//        }
-//        return null;
-//    }
+    public static LoginAdmin getLoginAdmin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof OAuth2Authentication) {
+            OAuth2Authentication oAuth2Auth = (OAuth2Authentication) authentication;
+            authentication = oAuth2Auth.getUserAuthentication();
+            if (authentication instanceof UsernamePasswordAuthenticationToken || authentication instanceof PreAuthenticatedAuthenticationToken){
+                LinkedHashMap authenticationToken = (LinkedHashMap) authentication.getDetails();
+                LinkedHashMap principal = (LinkedHashMap)authenticationToken.get("principal");
+                LoginAdmin loginPerson = new LoginAdmin();
+                try {
+                    BeanUtils.populate(loginPerson,principal);
+                    loginPerson.setEnabled((Boolean) principal.get("enabled"));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+                return loginPerson ;
+            }
+        }
+        return null;
+    }
 
     /**
      * 获取当前登入用户账号
@@ -80,13 +87,13 @@ public class OAuth2Utils {
         return getAuthentication().getName();
     }
 
-//    /**
-//     * 获取当前登录用户的ID
-//     * @return
-//     */
-//    public static Long getId(){
-//        return getLoginPerson().getAdminId();
-//    }
+    /**
+     * 获取当前登录管理员ID
+     * @return
+     */
+    public static Long getAdminId(){
+        return getLoginAdmin().getAdminId();
+    }
 
     /**
      *  获取当前登入用户的访问accessToken

@@ -52,3 +52,13 @@ spring:
     rxjava:
       schedulers:
         ignoredthreads: HystrixMetricPoller,^RxComputation.*$,^RxIoScheduler.*$ #忽略rxjava相关线程，防止产生无意义的span
+
+security:
+  oauth2:
+    resource:
+      id: ${spring.application.name}
+      ignore:
+        paths:
+          - /admin/login
+    token:
+      storeType: redis #token存储配置：inMemory，jdbc，redis，jwt

@@ -19,31 +19,30 @@ import javax.annotation.Resource;
 
 
 /**
- * 用户信息加载服务
+ * 管理员信息加载服务
  * @author: hmiter
  * @email: hmiter@sina.com
- * @date: 2018/6/14 9:52
+ * @date: 2019/4/23 16:47
  * @version: 1.0.0
  */
 @Component
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class AdminDetailsServiceImpl implements AdminDetailsService {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass()) ;
 
 	@Resource
-	private UserFeign userFeign;
+	private AdminFeign adminFeign;
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		LoginUser loginUser = userFeign.login(username);
-		if(null == loginUser){
-			logger.warn("用户不存在");
-			throw new AuthenticationCredentialsNotFoundException("用户不存在");
-		}else if(!loginUser.isEnabled()) {
-			logger.warn("用户已禁用");
-			throw new DisabledException("用户已禁用");
+	public UserDetails loadAdminByUsername(String username) throws UsernameNotFoundException {
+		LoginAdmin loginAdmin = adminFeign.login(username);
+		if(null == loginAdmin){
+			logger.warn("管理员不存在");
+			throw new AuthenticationCredentialsNotFoundException("管理员不存在");
+		}else if(!loginAdmin.isEnabled()) {
+			logger.warn("管理员已禁用");
+			throw new DisabledException("管理员已禁用");
 		}
-		return loginUser;
+		return loginAdmin;
 	}
-
 }

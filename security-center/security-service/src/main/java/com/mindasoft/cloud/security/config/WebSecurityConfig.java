@@ -1,5 +1,6 @@
 package com.mindasoft.cloud.security.config;
 
+import com.mindasoft.cloud.security.oauth2.AdminAuthenticationSecurityConfig;
 import com.mindasoft.cloud.security.properties.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -59,6 +60,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired(required = false)
     private AuthenticationEntryPoint authenticationEntryPoint;
+    @Autowired
+    private AdminAuthenticationSecurityConfig adminAuthenticationSecurityConfig;
 
 
     @Bean
@@ -88,15 +91,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //            .and().httpBasic() // 弹对话框输入账号
             .and().formLogin()
                 .loginPage("/login.html")
-                .loginProcessingUrl("/user/login")
+                .loginProcessingUrl("/oauth/user/login")
                 .successHandler(authenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)
             .and().logout()
-                .logoutUrl("/oauth/remove/token")
+                .logoutUrl("/oauth/logout")
                 .logoutSuccessUrl("/login.html")
                 .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
                 .addLogoutHandler(logoutHandler)
                 .clearAuthentication(true)
+            .and().apply(adminAuthenticationSecurityConfig) // 开启管理员验证配置
             .and().csrf().disable()// 禁用 跨站请求伪造
             .headers().frameOptions().disable().cacheControl(); //允许使用iframe 嵌套，避免swagger-ui 不被加载的问题;
 
