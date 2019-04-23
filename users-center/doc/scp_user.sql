@@ -2,7 +2,8 @@
 SQLyog  v12.2.6 (64 bit)
 MySQL - 5.6.39 : Database - scp_users
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -38,11 +39,12 @@ CREATE TABLE `tb_user` (
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `uni_username` (`username`),
   UNIQUE KEY `uni_mobile` (`mobile`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='用户表'
 
 /*Data for the table `tb_user` */
 
-insert  into `tb_user`(`user_id`,`username`,`mobile`,`email`,`password`,`nickname`,`avatar`,`name`,`idcard`,`sex`,`province`,`city`,`county`,`address`,`create_time`,`update_time`) values 
+insert into `tb_user`(`user_id`,`username`,`mobile`,`email`,`password`,`nickname`,`avatar`,`name`,`idcard`,`sex`,`province`,`city`,`county`,`address`,`create_time`,`update_time`) values
+
 (1,'user','123321','hm@user.com','user','张三','1',NULL,'88888',0,NULL,NULL,NULL,NULL,'2018-12-27 15:13:27','2018-12-27 15:14:13');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

@@ -20,6 +20,7 @@
 
     <modules>
         <module>users-service</module>
+        <module>users-feign</module>
     </modules>
 
 </project>

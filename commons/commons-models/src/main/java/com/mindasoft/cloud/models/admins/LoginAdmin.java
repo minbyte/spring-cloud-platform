@@ -1,7 +1,6 @@
-package com.mindasoft.cloud.models;
+package com.mindasoft.cloud.models.admins;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,22 +14,19 @@ import java.util.Set;
 
 /**
  * @author: min
- * @date: 2018/12/24 14:25
+ * @date: 2019/4/23 9:11
  * @version: 1.0.0
  */
-@Data
-public class LoginPerson implements UserDetails {
+@Getter
+@Setter
+public class LoginAdmin implements UserDetails {
+
     private Long adminId;
+
     private String username;
+
     private String password;
-    /**
-     * 昵称
-     */
-    private String nickname;
-    /**
-     * 头像
-     */
-    private String avatar;
+
     private Boolean enabled;
 
     private Collection<String> roles;

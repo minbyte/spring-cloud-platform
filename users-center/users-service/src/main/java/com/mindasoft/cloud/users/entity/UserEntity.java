@@ -21,7 +21,7 @@ public class UserEntity implements Serializable {
 	 * 用户ID
 	 */
 	@TableId
-	private Integer userId;
+	private Long userId;
 	/**
 	 * 用户账号
 	 */
@@ -86,13 +86,13 @@ public class UserEntity implements Serializable {
 	/**
 	 * 设置：用户ID
 	 */
-	public void setUserId(Integer userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 	/**
 	 * 获取：用户ID
 	 */
-	public Integer getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 	/**

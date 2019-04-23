@@ -16,5 +16,12 @@ import java.util.Map;
 public interface UserService extends IService<UserEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    /**
+     * 登录接口
+     * @param account 账号，可以是username\mobile\email
+     * @return
+     */
+    UserEntity login(String account);
 }
 

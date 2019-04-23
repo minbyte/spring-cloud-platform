@@ -97,8 +97,8 @@ feign:
     enabled: true
 
 ribbon:
-  ReadTimeout:  30000
-  ConnectTimeout:  15000
+  ReadTimeout:  20000   # 响应超时 20s
+  ConnectTimeout:  15000   # 连接超时 15s
   ServerListRefreshInterval: 2000  # ribbon缓存时间
 
 hystrix:
@@ -109,4 +109,9 @@ hystrix:
           enabled: true #是否开启超时熔断, 如果为false, 则熔断机制只在服务不可用时开启
         isolation:
           thread:
-            timeoutInMilliseconds : 1000  #设置超时熔断时间，默认1000(1s)
+            timeoutInMilliseconds: 5000  #设置超时熔断时间，默认1000(1s)
+      circuitBreaker:
+        requestVolumeThreshold: 3 # 当在配置时间窗口内达到此数量的失败后，进行短路。默认20个
+        sleepWindowInMilliseconds: 15000 # 触发短路的时间值，默认5000，则当触发 circuit break 后的5000毫秒内都会拒绝request 也就是5000毫秒后才会关闭circuit。
+        forceOpen: false # 强制打开熔断器，如果打开这个开关，那么拒绝所有request，默认false
+        forceClosed: false # 强制关闭熔断器 如果这个开关打开，circuit将一直关闭且忽略，默认false

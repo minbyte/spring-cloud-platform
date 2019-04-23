@@ -54,7 +54,7 @@ security:
           /oauth/authorize,
           /oauth/token
     token:
-      storeType: jwt #token存储配置：inMemory，jdbc，redis，jwt
+      storeType: redis #token存储配置：inMemory，jdbc，redis，jwt
     client:
       storeType: jdbc #client加载配置：inMemory，jdbc，redis
     code:

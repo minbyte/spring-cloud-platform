@@ -3,9 +3,14 @@ package com.mindasoft.cloud.users.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.mindasoft.cloud.commons.util.IPUtils;
+import com.mindasoft.cloud.models.users.LoginUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.mindasoft.cloud.users.entity.UserEntity;
@@ -29,11 +34,26 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @GetMapping("/login")
+    public LoginUser login(@RequestParam("account") String account, HttpServletRequest request){
+        if(!IPUtils.isLAN(request)){
+            return null;
+        }
+        UserEntity userEntity = userService.login(account);
+        if(null == userEntity){
+            return null;
+        }
+        LoginUser loginUser = new LoginUser();
+        BeanUtils.copyProperties(userEntity,loginUser);
+        loginUser.setEnabled(true);
+        return loginUser;
+    }
+
     /**
      * 列表
      */
     @GetMapping("/list")
-//    @PreAuthorize("hasAuthority('users:user:list')")
+    @PreAuthorize("hasAuthority('users:user:list')")
     @ApiOperation(value = "列表")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = userService.queryPage(params);
@@ -45,9 +65,9 @@ public class UserController {
      * 信息
      */
     @GetMapping("/info/{userId}")
-//    @PreAuthorize("hasAuthority('users:user:info')")
+    @PreAuthorize("hasAuthority('users:user:info')")
     @ApiOperation(value = "信息")
-    public R info(@PathVariable("userId") Integer userId){
+    public R info(@PathVariable("userId") Long userId){
         UserEntity user = userService.selectById(userId);
         return R.ok().put(user);
     }
@@ -56,7 +76,7 @@ public class UserController {
      * 保存
      */
     @PostMapping("/save")
-//    @PreAuthorize("hasAuthority('users:user:save')")
+    @PreAuthorize("hasAuthority('users:user:save')")
     @ApiOperation(value = "保存")
     public R save(@RequestBody UserEntity user){
         userService.insert(user);
@@ -67,7 +87,7 @@ public class UserController {
      * 修改
      */
     @PutMapping("/update")
-//    @PreAuthorize("hasAuthority('users:user:update')")
+    @PreAuthorize("hasAuthority('users:user:update')")
     @ApiOperation(value = "修改")
     public R update(@RequestBody UserEntity user){
         userService.updateById(user);
@@ -78,9 +98,9 @@ public class UserController {
      * 删除
      */
     @DeleteMapping("/delete")
-//    @PreAuthorize("hasAuthority('users:user:delete')")
+    @PreAuthorize("hasAuthority('users:user:delete')")
     @ApiOperation(value = "删除")
-    public R delete(@RequestBody Integer[] userIds){
+    public R delete(@RequestBody Long[] userIds){
         userService.deleteBatchIds(Arrays.asList(userIds));
         return R.ok();
     }
