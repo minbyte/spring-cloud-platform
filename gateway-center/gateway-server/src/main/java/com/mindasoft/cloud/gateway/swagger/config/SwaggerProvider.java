@@ -1,4 +1,4 @@
-package com.mindasoft.cloud.gateway.config;
+package com.mindasoft.cloud.gateway.swagger.config;
 
 import lombok.AllArgsConstructor;
 import org.springframework.cloud.gateway.config.GatewayProperties;
@@ -18,7 +18,7 @@ import java.util.List;
  * @version: 1.0.0
  */
 @Component
-@Primary
+@Primary // @Primary注解的实例优先于其他实例被注入
 @AllArgsConstructor
 public class SwaggerProvider implements SwaggerResourcesProvider {
     public static final String API_URI = "/v2/api-docs";

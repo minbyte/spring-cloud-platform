@@ -1,53 +1,52 @@
 server:
   port: 7010
+  servlet:
+    context-path: /
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    min-spare-threads: 30
+  connection-timeout: 5000ms
 
 spring:
   application:
     name: zuul-server
   profiles:
-    active: dev
+    active: dev  # 环境 dev|test|prod
 
-app:
-  ticket:
-    filter:
-      enabled: false # 开启ticket过滤
-
-# 注册服务
 eureka:
-#  instance:
-#    prefer-ip-address: true
-#    lease-renewal-interval-in-seconds: 5
-#    lease-expiration-duration-in-seconds: 20
   client:
-#    fetch-registry: true
-    serviceUrl:
+    service-url:
       defaultZone: http://localhost:7000/eureka
-    # 表示eureka client间隔多久去拉取服务注册信息，默认为30秒
-#    registry-fetch-interval-seconds: 5
+    healthcheck:
+      enabled: true
+    registry-fetch-interval-seconds: 5 #间隔多久去拉取服务注册信息，默认为30秒
+    instance-info-replication-interval-seconds: 10  # 实例信息变化报送间隔 30s
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${spring.application.instance_id:${server.port}}
+    lease-renewal-interval-in-seconds: 5    # 续eureka客户需要多长时间发送心跳给eureka服务器，表明它仍然活着,默认为30 秒
+    lease-expiration-duration-in-seconds: 10 # Eureka服务器在接收到实例的最后一次发出的心跳后，需要等待多久才可以将此实例删除，默认为90秒 EurekaServer一定要设置eureka.server.eviction-interval-timer-in-ms否则这个配置无效
+    #需要增加下面配置，告诉注册中心访问路径变化
+    status-page-url-path: /actuator/info
+    health-check-url-path: /actuator/health
+    home-page-url-path: /
 
-# 发现服务
-#feign:
-#  hystrix:
-#    enabled: true # 开启断路器
-
-#ribbon:
-#  eureka:
-#    enabled: false #配置zuul路由时用将此属性设置为false
-
-# 路由设置
-zuul:
-  #prefix: /techouse #为zuul设置一个公共的前缀
-  #ignoredServices: '*'
-#  add-host-header: true
-  routes:
-#    baidu:
-#      path: /baidu/**
-#      url: http://www.baidu.com/
-    user-path:  # 用户服务
-      path: /user/**
-      serviceId: user-service
-#      stripPrefix: true
-#    payment-path: # 配置中心
-#      path: /payment/**
-#      serviceId: payment-service
-#      stripPrefix: true
+#springboot2.0 的actuator配置项为：
+management:
+  endpoint:
+    shutdown:
+      enabled: true # 开始POST shutdown
+  endpoints:
+    web:
+#      base-path: "/" #修改访问路径  2.0之前默认是/   2.0默认是 /actuator  可以通过这个属性值修改
+      exposure:
+        include: '*'  #开放所有页面节点  默认只开启了health、info两个节点
+info: # 应用信息 /actuator/info 显示信息
+  app:
+    name: "@project.artifactId@"
+    encoding: '@project.build.sourceEncoding@'
+    profiles: ${spring.profiles.active}
+    java:
+      source: '@java.version@'
+      target: '@java.version@'

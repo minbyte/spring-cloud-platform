@@ -20,7 +20,7 @@ public class PermitProperties {
     private static final String[] ENDPOINTS = {
             "/oauth/**",
             "/actuator/**",
-            "/*/v2/api-docs",
+            "/v2/api-docs",
             "/swagger/api-docs",
             "/swagger-ui.html",
             "/swagger-resources/**",

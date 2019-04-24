@@ -38,8 +38,8 @@ CREATE TABLE `oauth_client_details` (
 /*Data for the table `oauth_client_details` */
 
 insert  into `oauth_client_details`(`id`,`client_id`,`resource_ids`,`client_secret`,`client_secret_str`,`scope`,`authorized_grant_types`,`web_server_redirect_uri`,`authorities`,`access_token_validity`,`refresh_token_validity`,`additional_information`,`autoapprove`) values
-  (1,'app',NULL,'$2a$10$i3F515wEDiB4Gvj9ym9Prui0dasRttEUQ9ink4Wpgb4zEDCAlV8zO','app','app','password,refresh_token',NULL,NULL,180000,NULL,'{}','true'),
-  (2,'webApp',NULL,'$2a$10$06msMGYRH8nrm4iVnKFNKOoddB8wOwymVhbUzw/d3ZixD7Nq8ot72','webApp','webApp','authorization_code,password,refresh_token,client_credentials',NULL,NULL,180000,NULL,'{}','true');
+  ('1','console',NULL,'console','console','base','password,refresh_token',NULL,NULL,'180000',NULL,'{}','true'),
+  ('2','app',NULL,'app','app','base,userinfo','authorization_code,password,client_credentials,implicit,refresh_token',NULL,NULL,'180000',NULL,'{}',NULL);
 
 
 /*Table structure for table `oauth_access_token` */

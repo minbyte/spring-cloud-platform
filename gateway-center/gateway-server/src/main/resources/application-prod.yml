@@ -1,7 +1,3 @@
-# 配置中心地址
-apollo:
-  meta: http://10.200.12.51:9000
-
 spring:
   cloud:        # spring cloud gateway 路由配置方式
     gateway:
@@ -9,25 +5,23 @@ spring:
         locator:      #路由访问方式：http://Gateway_HOST:Gateway_PORT/大写的serviceId/**，其中微服务应用名默认大写访问。
           enabled: true
       routes:
-      - id: PASSPORT-SERVICE
-        uri: lb://PASSPORT-SERVICE
+      - id: security-service
+        uri: lb://security-service
         predicates:
-          - Path=/passport/**
+          - Path=/oauth/**
         filters:
-          - StripPrefix=1        # StripPrefix=1  /user/**，只保留**部分
-
-# 不需要ticket和签名的URL
-ignore:
-  urls:
-    - /sta/*
-    - /payment/order/*
-    - /payment/test/*
-    - /payment/third/*
-    - /user/channel/userInfo
-#  给第三方调用时，需要签名的URL和密钥
-secret:
-  key: m20zdyh@065#$mgtv10d
-  urls:
-    - /sta/*
-    - /infra/weixin/*
-    - /payment/purse/*
+          - SwaggerHeaderFilter   # Swagger路径问题
+      - id: admins-service
+        uri: lb://admins-service
+        predicates:
+          - Path=/admins/**
+        filters:
+          - SwaggerHeaderFilter
+          - StripPrefix=1   # StripPrefix=1  /security/**，只保留**部分
+      - id: users-service
+        uri: lb://users-service
+        predicates:
+          - Path=/users/**
+        filters:
+          - SwaggerHeaderFilter
+          - StripPrefix=1

@@ -14,15 +14,6 @@ spring:
   profiles:
     active: dev  # 环境 dev|test|prod
 
-app:
-  ticket:
-    filter:
-      enabled: false # 开启ticket过滤
-
-apollo:
-  bootstrap:
-    enabled: true # 配置中心 在Spring Boot初始bootstrap阶段注入配置
-
 eureka:
   client:
     service-url:

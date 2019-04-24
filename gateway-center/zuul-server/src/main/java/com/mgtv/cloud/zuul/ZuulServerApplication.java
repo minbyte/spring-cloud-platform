@@ -14,7 +14,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  */
 @EnableZuulProxy
 @EnableDiscoveryClient
-@EnableFeignClients({"com.mgtv.cloud.passport"})
 @SpringBootApplication(scanBasePackages = {"com.mgtv.cloud.*"})
 public class ZuulServerApplication {
 

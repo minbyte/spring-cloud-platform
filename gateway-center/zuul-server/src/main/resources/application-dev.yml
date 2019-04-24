@@ -1,0 +1,72 @@
+# 路由设置
+#zuul:
+#  prefix: /techouse #为zuul设置一个公共的前缀
+#  ignoredServices: '*'
+#  add-host-header: true
+#  routes:
+#    baidu:
+#      path: /baidu/**
+#      url: http://www.baidu.com/
+#    user-path:  # 用户服务
+#      path: /user/**
+#      serviceId: user-service
+#      stripPrefix: true
+#    payment-path: # 配置中心
+#      path: /payment/**
+#      serviceId: payment-service
+#      stripPrefix: true
+
+zuul:
+  ribbon-isolation-strategy: thread
+  ribbon:
+    eager-load:
+      enabled: true
+    threadPool:
+      useSeparateThreadPools: true
+      threadPoolKeyPrefix: api-gateway
+  #关闭重试
+  retryable: false
+  #/oauth/token需要请求头处理
+  sensitive-headers:
+  ignored-headers: Access-Control-Allow-Credentials,Access-Control-Allow-Origin,Access-Control-Allow-Methods
+  ignored-patterns: /admins/admin/login,/users/user/login
+  add-host-header: true
+  ssl-hostname-validation-enabled: false
+  routes:
+    security:
+      path: /oauth/**
+      service-id: security-service
+      strip-prefix: false
+      custom-sensitive-headers: true
+    admins:
+      path: /admins/**
+      service-id: admins-service
+      strip-prefix: true
+      custom-sensitive-headers: true
+    users:
+      path: /users/**
+      service-id: users-service
+      strip-prefix: true
+      custom-sensitive-headers: true
+
+
+hystrix:
+  threadpool:
+    default:
+      coreSize: 100
+      maximumSize: 2000
+      allowMaximumSizeToDivergeFromCoreSize: true
+      maxQueueSize: -1
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+
+# swagger配置
+swagger:
+  api-docs-path:  /v2/api-docs
+  swagger-version: 2.0
+  auto-generate-from-zuul-routes: true
+#  generate-routes: user,file

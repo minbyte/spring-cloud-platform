@@ -56,23 +56,16 @@ public class OAuth2Controller {
 
     @ApiOperation(value = "管理员登录")
     @PostMapping("/oauth/admin/login")
-    public void getTokenByMobile(
+    public void adminLogin(HttpServletRequest request, HttpServletResponse response,
             @ApiParam(required = true, name = "username", value = "账号") String username,
-            @ApiParam(required = true, name = "password", value = "密码") String password,
-            HttpServletRequest request, HttpServletResponse response) throws IOException {
+            @ApiParam(required = true, name = "password", value = "密码") String password) throws IOException {
+
         AdminAuthenticationToken token = new AdminAuthenticationToken(username, password);
-        writerToken(request, response, token, "手机号或密码错误");
-    }
-
-    private void writerToken(HttpServletRequest request, HttpServletResponse response, AbstractAuthenticationToken token
-            , String badCredenbtialsMsg) throws IOException {
         try {
-//            final String[] clientInfos = OAuth2Utils.extractClient(request);
-            String clientId = request.getHeader("client_id");
-            String clientSecret = request.getHeader("client_secret");
-
+            String clientId = "console";
+            String clientSecret = "console";
             ClientDetails clientDetails = getClient(clientId, clientSecret);
-            TokenRequest tokenRequest = new TokenRequest(MapUtils.EMPTY_MAP, clientId, clientDetails.getScope(), "customer");
+            TokenRequest tokenRequest = new TokenRequest(MapUtils.EMPTY_MAP, clientId, clientDetails.getScope(), "password");
             OAuth2Request oAuth2Request = tokenRequest.createOAuth2Request(clientDetails);
             Authentication authentication = authenticationManager.authenticate(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -81,7 +74,7 @@ public class OAuth2Controller {
             oAuth2Authentication.setAuthenticated(true);
             writerObj(response, oAuth2AccessToken);
         } catch (BadCredentialsException | InternalAuthenticationServiceException e) {
-            exceptionHandler(response, badCredenbtialsMsg);
+            exceptionHandler(response, "账号或密码错误");
         } catch (Exception e) {
             exceptionHandler(response, e);
         }
