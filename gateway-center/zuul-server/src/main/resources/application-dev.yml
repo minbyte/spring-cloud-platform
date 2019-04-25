@@ -66,7 +66,7 @@ hystrix:
 
 # swagger配置
 swagger:
-  api-docs-path:  /v2/api-docs
+  api-docs-path: /v2/api-docs
   swagger-version: 2.0
   auto-generate-from-zuul-routes: true
-#  generate-routes: user,file
+  generate-routes: security-service,admins-service,users-service

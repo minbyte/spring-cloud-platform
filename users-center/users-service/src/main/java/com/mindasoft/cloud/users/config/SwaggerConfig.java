@@ -28,67 +28,55 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 
-@Component
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig implements WebMvcConfigurer {
 
     @Bean
     public Docket createRestApi() {
-        ParameterBuilder tokenPar = new ParameterBuilder();
-        List<Parameter> pars = new ArrayList<>();
-        tokenPar.name("Authorization")
-                .description("令牌")
-                .modelRef(new ModelRef("string"))
-                .parameterType("header")
-                .required(false).build();
-
-        pars.add(tokenPar.build());
-
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo()).select()
-                .apis(RequestHandlerSelectors.basePackage("com.mindasoft.cloud.users.controller"))
-                .apis(RequestHandlerSelectors.any())
-//                .paths( input ->PathSelectors.regex("/user.*").apply(input) || PathSelectors.regex("/permissions.*").apply(input)
-//                        || PathSelectors.regex("/roles.*").apply(input) || PathSelectors.regex("/test.*").apply(input)
-//                )
+//                .apis(RequestHandlerSelectors.any()) //任意接口
+                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))  //加了ApiOperation注解的类，才生成接口文档
+//                .apis(RequestHandlerSelectors.basePackage("com.mindasoft.cloud.users.controller"))  // 次包名下面的接口
                 .paths(PathSelectors.any())
-                .build().globalOperationParameters(pars);
+                .build()
+                .securitySchemes(securitySchemes())
+                .securityContexts(securityContexts());
     }
 
     private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("文件中心api").description("文件中心api").version("1.0").build();
+        return new ApiInfoBuilder().title("用户服务API").description("用户服务API").version("1.0").build();
     }
 
-    @Bean
-    public ViewResolver viewResolver() {
-        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-        resolver.setViewClass(JstlView.class);
-        resolver.setPrefix("/");
-        resolver.setSuffix(".html");
-        return resolver;
-
+    private List<ApiKey> securitySchemes() {
+        return newArrayList(
+                new ApiKey("令牌", "Authorization", "header")
+        );
     }
 
-    @Bean
-    public MessageSource messageSource() {
-        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("messages");
-        return messageSource;
+    private List<SecurityContext> securityContexts() {
+        return newArrayList(
+                SecurityContext.builder()
+                        .securityReferences(defaultAuth())
+                        .forPaths(PathSelectors.regex("^(?!oauth).*$"))
+                        .build()
+        );
+    }
+
+    List<SecurityReference> defaultAuth() {
+        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+        authorizationScopes[0] = authorizationScope;
+        return newArrayList(
+                new SecurityReference("Authorization", authorizationScopes));
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//		super.addResourceHandlers(registry);
         registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+        registry.addResourceHandler("/swagger/**").addResourceLocations("classpath:/static/swagger/");
     }
-
-    @Override
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-        configurer.enable();
-    }
-
-
 
 }

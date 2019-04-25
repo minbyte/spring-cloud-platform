@@ -6,6 +6,8 @@ import java.util.Map;
 import com.mindasoft.cloud.commons.util.IPUtils;
 import com.mindasoft.cloud.models.users.LoginUser;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.BeanUtils;
@@ -17,7 +19,7 @@ import com.mindasoft.cloud.users.entity.UserEntity;
 import com.mindasoft.cloud.users.service.UserService;
 import com.mindasoft.cloud.commons.util.PageUtils;
 import com.mindasoft.cloud.commons.util.R;
-
+import springfox.documentation.annotations.ApiIgnore;
 
 
 /**
@@ -55,7 +57,13 @@ public class UserController {
     @GetMapping("/list")
     @PreAuthorize("hasAuthority('users:user:list')")
     @ApiOperation(value = "列表")
-    public R list(@RequestParam Map<String, Object> params){
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "页码", paramType="query",dataTypeClass = Integer.class),
+            @ApiImplicitParam(name = "limit", value = "每页数目",paramType="query" ,dataTypeClass = Integer.class),
+            @ApiImplicitParam(name = "sidx", value = "排序字段", paramType="query" ),
+            @ApiImplicitParam(name = "order", value = "排序方式",  paramType="query" )
+    })
+    public R list(@ApiIgnore @RequestParam Map<String, Object> params){
         PageUtils page = userService.queryPage(params);
         return R.ok().put(page);
     }

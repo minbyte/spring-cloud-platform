@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import springfox.documentation.swagger.web.SwaggerResource;
 import springfox.documentation.swagger.web.SwaggerResourcesProvider;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,13 +20,14 @@ import java.util.List;
  */
 @Component
 @Primary // @Primary注解的实例优先于其他实例被注入
+@EnableSwagger2
 @EnableConfigurationProperties(SwaggerProperties.class)
 public class SwaggerProvider implements SwaggerResourcesProvider {
     @Autowired
     private RouteLocator routeLocator;
 
     @Autowired
-    private SwaggerProperties swaggerButlerConfig;
+    private SwaggerProperties swaggerProperties;
 
     @Override
     public List<SwaggerResource> get() {
@@ -35,15 +37,15 @@ public class SwaggerProvider implements SwaggerResourcesProvider {
         for (Route route : routes) {
             String routeName = route.getId();
 
-            SwaggerResourceProperties resourceProperties = swaggerButlerConfig.getResources().get(routeName);
+            SwaggerResourceProperties resourceProperties = swaggerProperties.getResources().get(routeName);
 
             // 不用根据zuul的路由自动生成，并且当前route信息没有配置resource则不生成文档
-            if (swaggerButlerConfig.getAutoGenerateFromZuulRoutes() == false && resourceProperties == null) {
+            if (!swaggerProperties.getAutoGenerateFromZuulRoutes() && resourceProperties == null) {
                 continue;
             }
 
             // 需要根据zuul的路由自动生成，但是当前路由名在忽略清单中（ignoreRoutes）或者不在生成清单中（generateRoutes）则不生成文档
-            if (swaggerButlerConfig.getAutoGenerateFromZuulRoutes() == true && swaggerButlerConfig.needIgnore(routeName)) {
+            if (swaggerProperties.getAutoGenerateFromZuulRoutes() && swaggerProperties.needIgnore(routeName)) {
                 continue;
             }
 
@@ -54,14 +56,14 @@ public class SwaggerProvider implements SwaggerResourcesProvider {
             }
 
             // 处理获取swagger文档的路径
-            String swaggerPath = swaggerButlerConfig.getApiDocsPath();
+            String swaggerPath = swaggerProperties.getApiDocsPath();
             if (resourceProperties != null && resourceProperties.getApiDocsPath() != null) {
                 swaggerPath = resourceProperties.getApiDocsPath();
             }
             String location = route.getFullPath().replace("**", swaggerPath);
 
             // 处理swagger的版本设置
-            String swaggerVersion = swaggerButlerConfig.getSwaggerVersion();
+            String swaggerVersion = swaggerProperties.getSwaggerVersion();
             if (resourceProperties != null && resourceProperties.getSwaggerVersion() != null) {
                 swaggerVersion = resourceProperties.getSwaggerVersion();
             }
