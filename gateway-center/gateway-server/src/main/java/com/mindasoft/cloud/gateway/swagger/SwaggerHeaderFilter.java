@@ -1,6 +1,5 @@
-package com.mindasoft.cloud.gateway.swagger.filter;
+package com.mindasoft.cloud.gateway.swagger;
 
-import com.mindasoft.cloud.gateway.swagger.config.SwaggerProvider;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;

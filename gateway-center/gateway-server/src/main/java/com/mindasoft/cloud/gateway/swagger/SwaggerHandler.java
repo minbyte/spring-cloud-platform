@@ -1,4 +1,4 @@
-package com.mindasoft.cloud.gateway.swagger.handler;
+package com.mindasoft.cloud.gateway.swagger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

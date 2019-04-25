@@ -33,10 +33,15 @@ zuul:
   add-host-header: true
   ssl-hostname-validation-enabled: false
   routes:
-    security:
+    oauth:
       path: /oauth/**
       service-id: security-service
       strip-prefix: false
+      custom-sensitive-headers: true
+    security:
+      path: /clients/**
+      service-id: security-service
+      strip-prefix: true
       custom-sensitive-headers: true
     admins:
       path: /admins/**

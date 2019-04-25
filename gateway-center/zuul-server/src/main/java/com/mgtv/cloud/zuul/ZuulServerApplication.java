@@ -13,7 +13,7 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
  */
 @EnableZuulProxy
 @EnableDiscoveryClient
-@SpringBootApplication(scanBasePackages = {"com.mgtv.cloud.*"})
+@SpringBootApplication()
 public class ZuulServerApplication {
 
     public static void main(String[] args) {
