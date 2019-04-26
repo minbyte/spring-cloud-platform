@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.cloud.openfeign.FeignClientsConfiguration;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 
 /**
  * fegin 服务之间权限调用，不加会报401错误
@@ -22,8 +23,6 @@ public class FeignInterceptorTokenConfig implements RequestInterceptor {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
 
-    private static final String BEARER_TOKEN_TYPE = "Bearer";
-
     /**
      * 使用feign client访问别的微服务时，将access_token放入参数或者header ，Authorization:Bearer xxx
      * 或者url?access_token=xxx
@@ -33,7 +32,7 @@ public class FeignInterceptorTokenConfig implements RequestInterceptor {
         String accessToken = OAuth2Utils.getAccessToken();
         if(accessToken != null){
             logger.debug("RequestInterceptorConfig accessToken :" +accessToken);
-            requestTemplate.header(AUTHORIZATION_HEADER,String.format("%s %s",BEARER_TOKEN_TYPE,accessToken));
+            requestTemplate.header(AUTHORIZATION_HEADER,String.format("%s %s", OAuth2AccessToken.BEARER_TYPE,accessToken));
         }
     }
 
